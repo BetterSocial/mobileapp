@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.4'
+platform :ios, '12.0'
 
 def find_and_replace(dir, findstr, replacestr)
   Dir[dir].each do |name|
@@ -23,6 +23,9 @@ target 'Helio' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'react-native-branch', path: '../node_modules/react-native-branch'
+  pod 'Analytics', '~> 4.1'
+  pod 'Mixpanel'
 
   # use_react_native!(:path => config["reactNativePath"], :hermes_enabled => true)
 
@@ -37,6 +40,9 @@ target 'Helio' do
     permissions_path = '../node_modules/react-native-permissions/ios'
     pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
     pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+    pod 'react-native-branch', path: '../node_modules/react-native-branch'
+    pod 'Analytics', '~> 4.1'
+    pod 'Mixpanel'
 
     use_react_native!(:path => config["reactNativePath"])
 
@@ -47,6 +53,9 @@ target 'Helio' do
     permissions_path = '../node_modules/react-native-permissions/ios'
     pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
     pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+    pod 'react-native-branch', path: '../node_modules/react-native-branch'
+    pod 'Analytics', '~> 4.1'
+    pod 'Mixpanel'
 
     use_react_native!(:path => config["reactNativePath"])
 
@@ -85,5 +94,5 @@ target 'Helio-tvOS' do
 end
 
 target 'OneSignalNotificationServiceExtension' do
-  pod 'OneSignalXCFramework', '>= 5.0.0', '< 6.0'
+  pod 'OneSignalXCFramework', '>= 5.2.3', '< 6.0'
 end

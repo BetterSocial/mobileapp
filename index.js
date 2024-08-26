@@ -39,7 +39,7 @@ Sentry.init({
 });
 
 enableScreens();
-const {HUMAN_ID_CLIENT_ID, HUMAN_ID_CLIENT_SECRET} = config;
+const {HUMAN_ID_CLIENT_ID, HUMAN_ID_CLIENT_SECRET, HUMAN_ID_APP_EXT_ID} = config;
 const clientSecret = HUMAN_ID_CLIENT_SECRET;
 const clientId = HUMAN_ID_CLIENT_ID;
 
@@ -47,6 +47,7 @@ configureHumanID({
   appName: 'Better Social',
   clientSecret,
   clientId,
+  appExtId: HUMAN_ID_APP_EXT_ID,
   Icon: AppIcon
 });
 

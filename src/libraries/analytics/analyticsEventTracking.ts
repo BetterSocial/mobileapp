@@ -2,7 +2,7 @@ import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
 import {JsonMap, createClient} from '@segment/analytics-react-native';
 
-import {ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
+import {ENABLE_SEGMENT, ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 
 /**
  * Please refer to this for all tracking enums.
@@ -11,6 +11,12 @@ import {ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 export enum BetterSocialEventTracking {
   //  DEFAULT EVENT
   UNDEFINED_EVENT = 'undefined_event',
+
+  // BACKDDOR
+  BACKDDOR_MENU_OPEN = 'PreLogin-Slider1_backDoorLogin_opened',
+  BACKDOOR_DUMMY_ONBOARDING_CLICKED = 'backdoorOB-demo_dummyOB_clicked',
+  BACKDOOR_DEMO_LOGIN_CLICKED = 'backdoorOB-demo_login_clicked',
+  BACKDOOR_CLOSE_MENU_CLICKED = 'backdoorOB-demo_closeDemoMenu_clicked',
 
   // ONBOARDING HUMAN ID
   HUMAN_ID_BUTTON_CLICKED = 'PreLogin-Slider5Login_hIDbutton_Clicked',
@@ -153,7 +159,7 @@ export enum BetterSocialEventTracking {
   MAIN_FEED_POST_DM_FOOTER_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-DMbutton_openDMmenu',
   MAIN_FEED_POST_DRAWER_DM_SIGNED_BUTTON_CLICKED = 'FeedPage-MainFeed_DMmenu-MessageUser_openSignedChat',
   MAIN_FEED_POST_DRAWER_DM_ANON_BUTTON_CLICKED = 'FeedPage-MainFeed_DMmenu-MessageAnon_openAnonChat',
-  MAIN_FEED_POST_SINGLE_POLL_CLICKED = 'FeedPage-MainFeed_postInteractions-pollChoice',
+  MAIN_FEED_POST_SINGLE_POLL_CLICKED = 'FeedPage-MainFeed_postInteractions-pollChoice_1,2,3,4',
   MAIN_FEED_POST_MULTIPLE_CHOICE_SEE_RESULTS_CLICKED = 'FeedPage-MainFeed_postInteractions-pollseeresults_clicked',
   MAIN_FEED_POST_THREE_DOTS_CLICKED = 'FeedPage-MainFeed_postInteractions-3dots_openPostOptionDrawer',
   MAIN_FEED_POST_FOOTER_REPLY_BUTTON_CLICKED = 'FeedPage-MainFeed_postInteractions-replyButton_openPDP',
@@ -169,8 +175,8 @@ export enum BetterSocialEventTracking {
   MAIN_FEED_BLOCK_USER_REPORT_INFO_SKIPPED = 'FeedPage-MainFeed_blockAndReport-reportInfoSkipped_clicked',
   MAIN_FEED_POST_FOOTER_UPVOTE_INSERTED = 'FeedPage-MainFeed_postInteractions-upvote_upvoted',
   MAIN_FEED_POST_FOOTER_DOWNVOTE_INSERTED = 'FeedPage-MainFeed_postInteractions-downvote_downvoted',
-  MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-downvote-unselected_downvote-removed',
-  MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-upvote-unselected_upvote-removed',
+  MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-downvote_unclicked',
+  MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-upvote_unclicked',
   MAIN_FEED_POST_TOPIC_CHIP_CLICKED = 'FeedPage-MainFeed_postInteractions-hashtag_openCP',
 
   // POST DETAIL PAGE
@@ -251,6 +257,10 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_SEARCHED_COMMUNITY_CLICKED = 'Discovery-SearchComms_searchComms_clicked',
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_recentSearches_clicked',
   DISCOVERY_SCREEN_SEARCH_COMMUNITY_CLEAR_RECENT_SEARCH_CLICKED = 'Discovery-SearchComms_clearRecentSearches_clicked',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_BACK_BUTTON_CLICKED = 'Discovery-SearchComms_backButton_openPrevPage',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_USERS_TAB_CLICKED = 'Discovery-SearchComms_searchUsersTab_openDiscovery-SearchUsers',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_NEWS_TAB_CLICKED = 'Discovery-SearchComms_searchNewsTab_openDiscovery-SearchNews',
+  DISCOVERY_SCREEN_SEARCH_COMMUNITY_DOMAINS_TAB_CLICKED = 'Discovery-SearchComms_searchDomainsTab_openDiscovery-SearchDomains',
 
   DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CLICKED = 'Discovery-SearchNews_openLink_clicked',
   DISCOVERY_SCREEN_SEARCH_NEWS_OPEN_LINK_CONTEXT_SCREEN = 'Discovery-SearchNews_linkContextScreen_opened',
@@ -288,6 +298,7 @@ export enum BetterSocialEventTracking {
   DISCOVERY_SCREEN_SEARCH_USERS_COMMUNITY_TAB_CLICKED = 'Discovery-SearchUsers_searchCommsTab_clicked',
   DISCOVERY_SCREEN_SEARCH_USERS_DOMAINS_TAB_CLICKED = 'Discovery-SearchUsers_searchDomainsTab_clicked',
   DISCOVERY_SCREEN_SEARCH_USERS_NEWS_TAB_CLICKED = 'Discovery-SearchUsers_searchNewsTab_clicked',
+  DISCOVERY_SCREEN_SEARCH_USERS_YOUR_USER_OPEN_DM_BUTTON_CLICKED = 'Discovery-SearchUsers_followedUsers-dmButton_openSignedChat',
 
   // Other Profile Screen
   OTHER_PROFILE_SCREEN_POST_DOWNVOTE_INSERTED = 'Profile-OtherProfile_postInteractions-downvote_downvoted',
@@ -414,6 +425,7 @@ export enum BetterSocialEventTracking {
   CREATE_POST_SCREEN_ADD_COMMS_DELETE_COMM_COMM_DELETED = 'CreatePostFlow-CreatePostFlow_addComms-deleteComm_commDeleted',
   CREATE_POST_SCREEN_ADD_COMMS_SAVE_COMMS_UPDATED = 'CreatePostFlow-CreatePostFlow_addComms-save_commsUpdated',
   CREATE_POST_SCREEN_ADD_COMMS_EXIT_CLICKED = 'CreatePostFlow-CreatePostFlow_addComms-exit_clicked',
+  CREATE_POST_SCREEN_BACK_BUTTON_CLICKED = 'CreatePostFlow-CreatePostFlow_backButton_openPrevPage',
 
   // CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN
   CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_BACK_BUTTON_CLICKED = 'CreateCommunity-Post_backButton_openPrevPage',
@@ -474,7 +486,10 @@ export enum BetterSocialEventTracking {
   CREATE_COMMUNITY_SCREEN_EXTERNAL_SHARING_CANCEL_BUTTON_CLICKED = 'CreateCommunity-InternalShare_externalsharingCancelButton_clicked',
   CREATE_COMMUNITY_SCREEN_NEXT_BUTTON_OPEN_CC_INTERNAL_SHARE_PAGE = 'CreateCommunity-Customize_customizePage-nextButton_openCC-InternalSharePage',
   CREATE_COMMUNITY_SCREEN_USER_NAME_SELECTED = 'CreateCommunity-InternalShare_userName_selected',
-  CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected'
+  CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected',
+
+  // BRANCH
+  BRANCH_OPEN_APP = 'Branch-Helio-OpenApp_opened'
 }
 
 // const ENABLE_TOAST = ENV === 'Dev';
@@ -487,6 +502,13 @@ const AnalyticsEventTracking = (() => {
       eventTrack: () => {
         console.error('Empty track');
       }
+    };
+  }
+
+  if (!ENABLE_SEGMENT) {
+    return {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      eventTrack: () => {}
     };
   }
 

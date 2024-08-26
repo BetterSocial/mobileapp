@@ -217,9 +217,9 @@ const TopicFragment = ({
     renderDiscoveryItem({
       from: isFirstTimeOpen
         ? FROM_FOLLOWED_TOPIC_INITIAL
-        : index > newMapFollowedTopics.length
-        ? FROM_UNFOLLOWED_TOPIC
-        : FROM_FOLLOWED_TOPIC,
+        : item.following || item.user_id_follower !== null
+        ? FROM_FOLLOWED_TOPIC
+        : FROM_UNFOLLOWED_TOPIC,
       item,
       index,
       section
@@ -282,6 +282,7 @@ const TopicFragment = ({
               />
             </>
           )}
+          ListFooterComponent={<View style={{height: 100}} />}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{paddingBottom: 100}}

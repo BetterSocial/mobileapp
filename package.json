@@ -35,7 +35,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@human-internet/react-native-humanid": "^2.4.12",
+    "@human-internet/react-native-humanid": "^2.4.13",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-clipboard/clipboard": "^1.11.2",
     "@react-native-community/blur": "^4.4.0",
@@ -76,6 +76,7 @@
     "react-native": "0.64.4",
     "react-native-activity-feed": "^1.0.3",
     "react-native-autolink": "^4.0.0",
+    "react-native-branch": "^6.2.2",
     "react-native-bundle-splitter": "^2.2.1",
     "react-native-collapsible": "^1.6.1",
     "react-native-compressor": "^1.6.1",
@@ -100,7 +101,7 @@
     "react-native-linear-gradient": "^2.5.6",
     "react-native-mmkv": "2.5.1",
     "react-native-modal": "^13.0.1",
-    "react-native-onesignal": "^5.0.0",
+    "react-native-onesignal": "^5.2.3",
     "react-native-permissions": "^3.2.0",
     "react-native-push-notification": "^8.1.1",
     "react-native-raw-bottom-sheet": "^2.2.0",

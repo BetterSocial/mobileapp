@@ -85,7 +85,7 @@ const useCreatePostScreenAnalyticsHook = (): useCreatePostScreenAnalyticsHook =>
 
   const onBackButtonClicked = () => {
     track(
-      trackEnum.UNDEFINED_EVENT,
+      trackEnum.CREATE_POST_SCREEN_BACK_BUTTON_CLICKED,
       trackEnum.CREATE_POST_FROM_CREATE_COMMUNITY_SCREEN_BACK_BUTTON_CLICKED
     );
   };

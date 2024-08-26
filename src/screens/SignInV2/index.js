@@ -2,9 +2,10 @@ import * as React from 'react';
 import JwtDecode from 'jwt-decode';
 import SimpleToast from 'react-native-simple-toast';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
+import {BackHandler, Linking, StatusBar, StyleSheet, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {
+  handleDeepLink,
   logIn,
   onCancel,
   onError,
@@ -53,59 +54,29 @@ const SignIn = () => {
     setClickTime(0);
   };
 
+  const subscribeDeeplink = () => {
+    const onDeepLink = (deepLink) => {
+      handleDeepLink(deepLink?.url, handleExchangeToken, (error) =>
+        console.log('error human id', error)
+      );
+    };
+
+    Linking.addEventListener('url', onDeepLink);
+    return () => {
+      Linking.removeEventListener('url', onDeepLink);
+    };
+  };
+
   React.useEffect(() => {
     setDataHumenId(null, dispatch);
+    const unsubscribe = subscribeDeeplink();
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   React.useEffect(() => {
-    onSuccess(async (exchangeToken) => {
-      try {
-        const response = await verifyHumanIdExchangeToken(exchangeToken);
-        if (response?.data?.data) {
-          const {token, anonymousToken} = response?.data || {};
-          TokenStorage.set(response?.data);
-          setValueStartup({
-            id: token,
-            deeplinkProfile: false
-          });
-          create(token);
-          setUserId(response?.data?.appUserId);
-          try {
-            const userId = await JwtDecode(token).user_id;
-            const anonymousUserId = await JwtDecode(anonymousToken).user_id;
-            setAuth({
-              anonProfileId: anonymousUserId,
-              signedProfileId: userId,
-              token,
-              anonymousToken
-            });
-            AnalyticsEventTracking.eventTrack(
-              BetterSocialEventTracking.HUMAN_ID_SUCCESS_EXISTING_ACCOUNT
-            );
-          } catch (e) {
-            crashlytics().recordError(new Error(e));
-          }
-        } else {
-          setDataHumenId(response?.data?.humanIdData, dispatch);
-          removeLocalStorege('userId');
-          navigation.dispatch(StackActions.replace('ChooseUsername'));
-          setUserId(response?.data?.humanIdData?.appUserId);
-          AnalyticsEventTracking.eventTrack(
-            BetterSocialEventTracking.HUMAN_ID_SUCCESS_NEW_REGISTRATION
-          );
-        }
-      } catch (e) {
-        SimpleToast.show(e?.message, SimpleToast.SHORT);
-        crashlytics().recordError(new Error(e?.message));
-        AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_FAILED_VERIFICATION, {
-          error: e
-        });
-        if (__DEV__) {
-          console.log('error');
-          console.log(e);
-        }
-      }
-    });
+    onSuccess(handleExchangeToken);
     onError((message) => {
       crashlytics().recordError(new Error(message));
     });
@@ -121,6 +92,55 @@ const SignIn = () => {
 
     return cleanup;
   }, []);
+
+  const handleExchangeToken = async (exchangeToken) => {
+    try {
+      const response = await verifyHumanIdExchangeToken(exchangeToken);
+      if (response?.data?.data) {
+        const {token, anonymousToken} = response?.data || {};
+        TokenStorage.set(response?.data);
+        setValueStartup({
+          id: token,
+          deeplinkProfile: false
+        });
+        create(token);
+        setUserId(response?.data?.appUserId);
+        try {
+          const userId = await JwtDecode(token).user_id;
+          const anonymousUserId = await JwtDecode(anonymousToken).user_id;
+          setAuth({
+            anonProfileId: anonymousUserId,
+            signedProfileId: userId,
+            token,
+            anonymousToken
+          });
+          AnalyticsEventTracking.eventTrack(
+            BetterSocialEventTracking.HUMAN_ID_SUCCESS_EXISTING_ACCOUNT
+          );
+        } catch (e) {
+          crashlytics().recordError(new Error(e));
+        }
+      } else {
+        setDataHumenId(response?.data?.humanIdData, dispatch);
+        removeLocalStorege('userId');
+        navigation.dispatch(StackActions.replace('ChooseUsername'));
+        setUserId(response?.data?.humanIdData?.appUserId);
+        AnalyticsEventTracking.eventTrack(
+          BetterSocialEventTracking.HUMAN_ID_SUCCESS_NEW_REGISTRATION
+        );
+      }
+    } catch (e) {
+      SimpleToast.show(e?.message, SimpleToast.SHORT);
+      crashlytics().recordError(new Error(e?.message));
+      AnalyticsEventTracking.eventTrack(BetterSocialEventTracking.HUMAN_ID_FAILED_VERIFICATION, {
+        error: e
+      });
+      if (__DEV__) {
+        console.log('error');
+        console.log(e);
+      }
+    }
+  };
 
   const handleLogin = () => {
     try {

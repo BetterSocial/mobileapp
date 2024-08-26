@@ -56,7 +56,7 @@ const ContentPoll = ({
     if (!multiplechoice) {
       if (pollSelectedEventName) {
         AnalyticsEventTracking.eventTrack(pollSelectedEventName, {
-          index: singleChoiceSelectedIndex
+          index: singleChoiceSelectedIndex + 1
         });
       }
       onSeeResultsClicked(item, multiplechoice, onnewpollfetched, index);

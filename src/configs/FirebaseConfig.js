@@ -40,6 +40,8 @@ const FirebaseConfig = () => {
   }, []);
 
   const parseDeepLink = async (deepLinkUrl) => {
+    if (deepLinkUrl?.includes('m.helio.social')) return;
+
     if (DEEPLINK_POST_REGEX.test(deepLinkUrl)) return handleDeepLinkPost(deepLinkUrl);
     if (DEEPLINK_COMMUNITY_REGEX.test(deepLinkUrl)) return handleDeepLinkCommunity(deepLinkUrl);
     if (DEEPLINK_USER_REGEX.test(deepLinkUrl)) return handleDeepLinkUser(deepLinkUrl);
