@@ -142,14 +142,21 @@ const useDiscovery = () => {
   };
 
   const getIsMeFollowingTargetStatus = React.useCallback(
-    (userId) => {
-      const targetUser = discovery?.initialUsers?.find((item) => item?.user_id === userId);
-      const targetUserFromFollowed = discovery?.followedUsers?.find(
-        (item) => item?.user_id === userId
-      );
-      const targetUserFromFollowing = discovery?.unfollowedUsers?.find(
-        (item) => item?.user_id === userId
-      );
+    (userId, username) => {
+      function findUser(user) {
+        const isUsernameSame =
+          user?.username?.toLocaleLowerCase() === username?.toLocaleLowerCase();
+        const isUserIdSame = user?.user_id === userId;
+
+        if (username && username.length > 0) {
+          return isUserIdSame || isUsernameSame;
+        }
+
+        return isUserIdSame;
+      }
+      const targetUser = discovery?.initialUsers?.find(findUser);
+      const targetUserFromFollowed = discovery?.followedUsers?.find(findUser);
+      const targetUserFromFollowing = discovery?.unfollowedUsers?.find(findUser);
 
       return (
         targetUser?.is_followed ||
