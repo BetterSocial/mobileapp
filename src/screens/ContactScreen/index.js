@@ -34,8 +34,12 @@ import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
+import {
+  CONTACT_SCREEN_MAX_SELECTED_USERS,
+  DEFAULT_PROFILE_PIC_PATH,
+  NavigationConstants
+} from '../../utils/constants';
 import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH, NavigationConstants} from '../../utils/constants';
 import {Header as HeaderGeneral, Loading} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {Search} from './elements';
@@ -93,26 +97,28 @@ const ContactScreen = ({navigation}) => {
     const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
       50,
       parseInt(userPage.currentPage, 10),
-      isAnon
+      isAnon,
+      {
+        excludedUserNames: existParticipants
+      }
     );
     setUserPage({
       currentPage: initialData.page,
       totalPage: initialData.total_page
     });
-    DiscoveryAction.setDiscoveryInitialUsers(
-      [...discoveryData.initialUsers, ...initialData.suggestedUsers],
-      discoveryDispatch
-    );
-    const userData = discoveryData.initialUsers.map((item) => ({
+    const discoveryUsersToSet = [...discoveryData.initialUsers, ...initialData.suggestedUsers];
+    DiscoveryAction.setDiscoveryInitialUsers(discoveryUsersToSet, discoveryDispatch);
+
+    const userData = discoveryUsersToSet?.map((item) => ({
       ...item,
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
 
-    setUsers(
-      userData?.filter((item) =>
-        isAddParticipant ? !existParticipants.includes(item.username) : item
-      )
+    const usersToSet = userData?.filter((item) =>
+      isAddParticipant ? !existParticipants.includes(item.username) : item
     );
+
+    setUsers(usersToSet);
   };
 
   const handleSearch = async (searchText) => {
@@ -365,6 +371,13 @@ const ContactScreen = ({navigation}) => {
       eventTrack.onCreateCommunityScreenUserNameUnselected();
       copyUsers.splice(indexSelectedUser, 1);
     } else {
+      if (copyUsers.length >= CONTACT_SCREEN_MAX_SELECTED_USERS) {
+        SimpleToast.show(
+          `You can only select up to ${CONTACT_SCREEN_MAX_SELECTED_USERS} users`,
+          SimpleToast.SHORT
+        );
+        return;
+      }
       eventTrack.onCreateCommunityScreenUserNameSelected();
       copyUsers.push(value);
     }

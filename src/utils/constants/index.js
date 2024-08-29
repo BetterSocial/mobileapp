@@ -80,6 +80,8 @@ const CHANNEL_LIST_GET_INITIAL_MESSAGES_LIMIT = 20;
 const SETTINGS_FAQ_URL = 'https://home.helio.social/faq';
 const SETTINGS_PRIVACY_URL = 'https://home.helio.social/privacy';
 
+const CONTACT_SCREEN_MAX_SELECTED_USERS = 99;
+
 const getPostType = (postTypeInNumber) => {
   switch (postTypeInNumber) {
     case POST_TYPE_LINK:
@@ -110,6 +112,7 @@ export {
   CHANNEL_TYPE_TOPIC,
   CHAT_ANON,
   CHAT_SIGNED,
+  CONTACT_SCREEN_MAX_SELECTED_USERS,
   CONTEXT_MENU_COPY,
   CONTEXT_MENU_DELETE,
   CONTEXT_MENU_REPLY,

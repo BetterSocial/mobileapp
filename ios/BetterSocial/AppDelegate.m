@@ -97,7 +97,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   // SEGMENT INITIALIZATION
   SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
   configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
-  configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
+//  configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
   [SEGAnalytics setupWithConfiguration:configuration];
 
   // BRANCH INITIALIZATION

@@ -1,8 +1,8 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {Dimensions, StyleSheet, Text} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
-import PropTypes from 'prop-types';
 
 import FgOnboarding1 from '../../../assets/background/fg_onboarding_full_1.png';
 import FgOnboarding2 from '../../../assets/background/fg_onboarding_full_2.png';
@@ -18,72 +18,72 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
   const flatListRef = React.useRef(null);
 
   const data = [
-    {
-      illustrations: FgOnboarding1,
-      title: 'Go Incognito with a Tap',
-      text: (
-        <Text>
-          {'Post, comment and chat with or without'}
-          {'\n'}
+    // {
+    //   illustrations: FgOnboarding1,
+    //   title: 'Go Incognito with a Tap',
+    //   text: (
+    //     <Text>
+    //       {'Post, comment and chat with or without'}
+    //       {'\n'}
 
-          {'revealing your username - it’s up to you!'}
-          {'\n'}
+    //       {'revealing your username - it’s up to you!'}
+    //       {'\n'}
 
-          {'So go ahead and say what you really think!'}
-        </Text>
-      )
-    },
-    {
-      illustrations: FgOnboarding2,
-      title: 'Better Karma, Higher Visibility',
-      text: (
-        <Text>
-          {'Karma scores help the community stay'}
-          {'\n'}
+    //       {'So go ahead and say what you really think!'}
+    //     </Text>
+    //   )
+    // },
+    // {
+    //   illustrations: FgOnboarding2,
+    //   title: 'Better Karma, Higher Visibility',
+    //   text: (
+    //     <Text>
+    //       {'Karma scores help the community stay'}
+    //       {'\n'}
 
-          {'accountable even when in Incognito Mode.'}
-          {'\n'}
+    //       {'accountable even when in Incognito Mode.'}
+    //       {'\n'}
 
-          {'To increase your score, just invite followers,'}
-          {'\n'}
+    //       {'To increase your score, just invite followers,'}
+    //       {'\n'}
 
-          {'create posts and avoid being blocked!'}
-        </Text>
-      )
-    },
-    {
-      illustrations: FgOnboarding3,
-      title: 'Find Your #community',
-      text: (
-        <Text>
-          {'Create or post in communities just by using a'}
-          {'\n'}
+    //       {'create posts and avoid being blocked!'}
+    //     </Text>
+    //   )
+    // },
+    // {
+    //   illustrations: FgOnboarding3,
+    //   title: 'Find Your #community',
+    //   text: (
+    //     <Text>
+    //       {'Create or post in communities just by using a'}
+    //       {'\n'}
 
-          {'hashtags. To protect your privacy, '}
-          {'\n'}
+    //       {'hashtags. To protect your privacy, '}
+    //       {'\n'}
 
-          {'communities can be joined incognito as well!'}
-        </Text>
-      )
-    },
-    {
-      illustrations: FgOnboarding4,
-      title: 'Don’t Miss Anything',
-      text: (
-        <Text>
-          {'Chats, posts, comments, and communities:'}
-          {'\n'}
+    //       {'communities can be joined incognito as well!'}
+    //     </Text>
+    //   )
+    // },
+    // {
+    //   illustrations: FgOnboarding4,
+    //   title: 'Don’t Miss Anything',
+    //   text: (
+    //     <Text>
+    //       {'Chats, posts, comments, and communities:'}
+    //       {'\n'}
 
-          {'Find all your conversations, separated'}
-          {'\n'}
+    //       {'Find all your conversations, separated'}
+    //       {'\n'}
 
-          {'between your incognito and your public'}
-          {'\n'}
+    //       {'between your incognito and your public'}
+    //       {'\n'}
 
-          {'activity.'}
-        </Text>
-      )
-    },
+    //       {'activity.'}
+    //     </Text>
+    //   )
+    // },
     {
       isLogin: true,
       illustrations: FgOnboarding1,
