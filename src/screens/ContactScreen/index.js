@@ -373,7 +373,7 @@ const ContactScreen = ({navigation}) => {
     } else {
       if (copyUsers.length >= CONTACT_SCREEN_MAX_SELECTED_USERS) {
         SimpleToast.show(
-          `You can only select up to ${CONTACT_SCREEN_MAX_SELECTED_USERS} people`,
+          `You can only select up to ${CONTACT_SCREEN_MAX_SELECTED_USERS} users`,
           SimpleToast.SHORT
         );
         return;
