@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Dimensions, Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
-
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import BgOnboardingTop from '../../../assets/background/bg_onboarding_top.png';
 import BottomOverlay from './BottomOverlay';
 import dimen from '../../../utils/dimen';
@@ -26,15 +26,15 @@ export const SlideShowItem = ({
   const {top} = useSafeAreaInsets();
   // eslint-disable-next-line no-underscore-dangle
   const __renderForeground = () => {
-    if (index < 4)
-      return (
-        <TouchableWithoutFeedback onPress={onPressContainer}>
-          <Image
-            source={illustration}
-            style={styles.onboardingForeground(heightTopContainer, top)}
-          />
-        </TouchableWithoutFeedback>
-      );
+    // if (index < 4)
+    //   return (
+    //     <TouchableWithoutFeedback onPress={onPressContainer}>
+    //       <Image
+    //         source={illustration}
+    //         style={styles.onboardingForeground(heightTopContainer, top)}
+    //       />
+    //     </TouchableWithoutFeedback>
+    //   );
     return <></>;
   };
 
@@ -45,8 +45,7 @@ export const SlideShowItem = ({
 
   // eslint-disable-next-line no-underscore-dangle
   const __renderBackground = () => {
-    // if (index < 4) return <Image source={BgOnboarding} style={styles.onboardingBackground} />
-    if (index < 4) return <></>;
+    // if (index < 4) return <></>;
     return (
       <TouchableWithoutFeedback onPress={onPressContainer}>
         <View style={styles.onboardingBackgroundTopContainer}>
