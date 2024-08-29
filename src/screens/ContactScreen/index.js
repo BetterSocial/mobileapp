@@ -93,26 +93,28 @@ const ContactScreen = ({navigation}) => {
     const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
       50,
       parseInt(userPage.currentPage, 10),
-      isAnon
+      isAnon,
+      {
+        excludedUserNames: existParticipants
+      }
     );
     setUserPage({
       currentPage: initialData.page,
       totalPage: initialData.total_page
     });
-    DiscoveryAction.setDiscoveryInitialUsers(
-      [...discoveryData.initialUsers, ...initialData.suggestedUsers],
-      discoveryDispatch
-    );
-    const userData = discoveryData.initialUsers.map((item) => ({
+    const discoveryUsersToSet = [...discoveryData.initialUsers, ...initialData.suggestedUsers];
+    DiscoveryAction.setDiscoveryInitialUsers(discoveryUsersToSet, discoveryDispatch);
+
+    const userData = discoveryUsersToSet?.map((item) => ({
       ...item,
       following: item.following !== undefined ? item.following : item.user_id_follower !== null
     }));
 
-    setUsers(
-      userData?.filter((item) =>
-        isAddParticipant ? !existParticipants.includes(item.username) : item
-      )
+    const usersToSet = userData?.filter((item) =>
+      isAddParticipant ? !existParticipants.includes(item.username) : item
     );
+
+    setUsers(usersToSet);
   };
 
   const handleSearch = async (searchText) => {
