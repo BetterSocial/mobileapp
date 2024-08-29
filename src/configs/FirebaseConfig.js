@@ -2,9 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SimpleToast from 'react-native-simple-toast';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {Alert, Linking} from 'react-native';
+import {Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
+import StorageUtils from '../utils/storage';
 import StringConstant from '../utils/string/StringConstant';
 import useUserAuthHook from '../hooks/core/auth/useUserAuthHook';
 import {
@@ -13,6 +14,7 @@ import {
   POST_CHECK_FEED_EXPIRED,
   POST_CHECK_FEED_NOT_FOUND
 } from '../utils/constants';
+import {getMyProfile} from '../service/profile';
 import {getUserId} from '../utils/users';
 import {isAuthorFollowingMe} from '../service/post';
 
@@ -189,7 +191,28 @@ const FirebaseConfig = () => {
 
   const handleDeepLinkUser = async (deepLinkUrl) => {
     const username = deepLinkUrl?.split('helio.social/')[1];
-    if (username?.toLocaleLowerCase() === profile?.username?.toLocaleLowerCase()) {
+
+    let profileDataFromStorage;
+    let profileFromApi = null;
+
+    if (!profile?.username) {
+      const profileStorage = StorageUtils.profileData.get();
+      try {
+        profileDataFromStorage = JSON.parse(profileStorage);
+      } catch (e) {
+        console.log('Error parsing profile storage', e);
+      }
+    }
+
+    if (!profileDataFromStorage) {
+      profileFromApi = await getMyProfile();
+      StorageUtils.profileData.set(JSON.stringify(profile.data));
+    }
+
+    const checkedUsername =
+      profile?.username || profileDataFromStorage?.username || profileFromApi?.data?.username || '';
+
+    if (username?.toLocaleLowerCase() === checkedUsername?.toLocaleLowerCase()) {
       return navigation.navigate('Profile');
     }
 
