@@ -34,8 +34,12 @@ import useGroupInfo from '../GroupInfo/hooks/useGroupInfo';
 import {ANONYMOUS} from '../../hooks/core/constant';
 import {Button} from '../../components/Button';
 import {COLORS} from '../../utils/theme';
+import {
+  CONTACT_SCREEN_MAX_SELECTED_USERS,
+  DEFAULT_PROFILE_PIC_PATH,
+  NavigationConstants
+} from '../../utils/constants';
 import {Context} from '../../context';
-import {DEFAULT_PROFILE_PIC_PATH, NavigationConstants} from '../../utils/constants';
 import {Header as HeaderGeneral, Loading} from '../../components';
 import {ProgressBar} from '../../components/ProgressBar';
 import {Search} from './elements';
@@ -367,6 +371,13 @@ const ContactScreen = ({navigation}) => {
       eventTrack.onCreateCommunityScreenUserNameUnselected();
       copyUsers.splice(indexSelectedUser, 1);
     } else {
+      if (copyUsers.length >= CONTACT_SCREEN_MAX_SELECTED_USERS) {
+        SimpleToast.show(
+          `You can only select up to ${CONTACT_SCREEN_MAX_SELECTED_USERS} people`,
+          SimpleToast.SHORT
+        );
+        return;
+      }
       eventTrack.onCreateCommunityScreenUserNameSelected();
       copyUsers.push(value);
     }
