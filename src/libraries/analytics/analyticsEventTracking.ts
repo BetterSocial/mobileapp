@@ -532,12 +532,19 @@ const AnalyticsEventTracking = (() => {
 
       if (!additionalData) {
         if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY) SimpleToast.show(event);
-        return client.track(event);
+        return client.track(event, {
+          segmentAnonymousId: client.userInfo.get()?.anonymousId,
+          segmentUserId: client.userInfo.get()?.userId
+        });
       }
 
       if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY)
         SimpleToast.show(`${event} ${JSON.stringify(additionalData || {})}`);
-      return client.track(event, (additionalData || {}) as JsonMap);
+      return client.track(event, {
+        ...(additionalData || {}),
+        segmentAnonymousId: client.userInfo.get()?.anonymousId,
+        segmentUserId: client.userInfo.get()?.userId
+      } as JsonMap);
     }
   };
 })();
