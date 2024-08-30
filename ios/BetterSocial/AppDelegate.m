@@ -96,7 +96,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   
   // SEGMENT INITIALIZATION
   SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
-  configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
+  // configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
 //  configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
   [SEGAnalytics setupWithConfiguration:configuration];
 
@@ -113,17 +113,17 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   NSString *segmentAnonymousId = [[SEGAnalytics sharedAnalytics] getAnonymousId];
   
   // MIXPANEL INITIALIZATION
-  Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken trackAutomaticEvents: NO];
-  NSString *mixpanelDistinctId = [Mixpanel sharedInstance].distinctId;
+  // Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken trackAutomaticEvents: NO];
+  // NSString *mixpanelDistinctId = [Mixpanel sharedInstance].distinctId;
   
   
   // SEGMENT SET METADATA KEY
   Branch *branch = [Branch getInstance];
-  [[Branch getInstance] setRequestMetadataKey:@"$mixpanel_distinct_id" value:mixpanelDistinctId];
+  // [[Branch getInstance] setRequestMetadataKey:@"$mixpanel_distinct_id" value:mixpanelDistinctId];
   [[Branch getInstance] setRequestMetadataKey:@"$segment_anonymous_id" value:segmentAnonymousId];
   
   NSLog(@"segment anonymous id = %@", segmentAnonymousId);
-  NSLog(@"mixpanel distinct id = %@", mixpanelDistinctId);
+  // NSLog(@"mixpanel distinct id = %@", mixpanelDistinctId);
   NSLog(@"segment write key MODE %@ = %@", envMode, segmentWriteKey);
   
   [RNSplashScreen show];
