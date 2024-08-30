@@ -79,7 +79,7 @@ const PreviewComment = ({
           height: normalize(56),
           position: 'absolute',
           width: '100%',
-          marginTop: -1
+          marginTop: -4
         }}
         onPress={onPress}>
         <BlurredLayer
