@@ -315,6 +315,8 @@ const FeedScreen = (props) => {
     );
   };
 
+  const contentHeight = dimen.size.FEED_CURRENT_ITEM_HEIGHT;
+
   return (
     <View>
       <StatusBar translucent={false} barStyle={'light-content'} />
@@ -339,7 +341,7 @@ const FeedScreen = (props) => {
       )}
       <TiktokScroll
         ref={listRef}
-        contentHeight={dimen.size.FEED_CURRENT_ITEM_HEIGHT}
+        contentHeight={contentHeight}
         data={feeds}
         onRefresh={onRefresh}
         onScroll={handleScrollEvent}
@@ -356,6 +358,7 @@ const FeedScreen = (props) => {
           });
           fetchNextFeeds(momentumEvent);
         }}
+        snapToOffsets={[...Array(feeds.length).keys()].map((i) => i * contentHeight)}
       />
       <ButtonNewPost
         onRefresh={onRefresh}
