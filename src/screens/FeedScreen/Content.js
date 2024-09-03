@@ -1,5 +1,6 @@
 /* eslint-disable no-plusplus */
 import * as React from 'react';
+import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
@@ -7,7 +8,6 @@ import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-nat
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import FastImage from 'react-native-fast-image';
 import BlurredLayer from './elements/BlurredLayer';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
@@ -21,6 +21,7 @@ import {
   POST_TYPE_POLL,
   POST_TYPE_STANDARD
 } from '../../utils/constants';
+import {LinkableText} from '../../components/LinkableText';
 import {fonts, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {getCaptionWithTopicStyle} from '../../utils/string/StringUtils';
 import {getCommentLength} from '../../utils/getstream';
@@ -217,7 +218,7 @@ const Content = ({
             numberOfLines={calculateMaxLine()}
             onLayout={handleTextLine}
             style={[handleStyleFont(), handleContainerText().text]}>
-            {message}
+            <LinkableText text={message} withTopicDetection={true} />
           </Text>
         ) : (
           <>
