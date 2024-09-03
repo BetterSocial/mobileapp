@@ -2,6 +2,7 @@ import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
 import {JsonMap, createClient} from '@segment/analytics-react-native';
 
+import StorageUtils from '../../utils/storage';
 import {ENABLE_SEGMENT, ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
 
 /**
@@ -530,11 +531,21 @@ const AnalyticsEventTracking = (() => {
         return Promise.resolve();
       }
 
+      let signedUserId: string | null = null;
+      try {
+        const profileJson = JSON.parse(StorageUtils.profileData.get() || '{}');
+        signedUserId = profileJson?.user_id;
+        console.log('profileJson', profileJson?.user_id);
+      } catch (e) {
+        console.log('Error getting profile data', e);
+      }
+
       if (!additionalData) {
         if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY) SimpleToast.show(event);
         return client.track(event, {
           segmentAnonymousId: client.userInfo.get()?.anonymousId,
-          segmentUserId: client.userInfo.get()?.userId
+          segmentUserId: client.userInfo.get()?.userId,
+          signedUserId
         });
       }
 
@@ -543,7 +554,8 @@ const AnalyticsEventTracking = (() => {
       return client.track(event, {
         ...(additionalData || {}),
         segmentAnonymousId: client.userInfo.get()?.anonymousId,
-        segmentUserId: client.userInfo.get()?.userId
+        segmentUserId: client.userInfo.get()?.userId,
+        signedUserId
       } as JsonMap);
     }
   };
