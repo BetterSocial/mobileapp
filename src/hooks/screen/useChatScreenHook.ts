@@ -26,6 +26,9 @@ import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 import {useGetAllMessage} from './services/chatScreenHooks';
 import {useSendAnonMessage, useSendSignedMessage} from '../../service/chat';
+import {QueueJobPriority} from '../../core/queue/BaseQueue';
+import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
+import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -39,6 +42,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   const {selectedChannel, goBackFromChatScreen, goToChatInfoScreen, setChannelAsRead} =
     useChatUtilsHook(type);
   const {anonProfileId, signedProfileId} = useUserAuthHook();
+  const {queue} = useDatabaseQueueHook();
   const {eventTrackByUserType, getEventName} = useAnalyticUtilsHook(type);
   const [, setCurrentChatScreen] = useRecoilState(currentChatScreenAtom);
 
@@ -71,6 +75,55 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   );
 
   const initChatData = async () => {
+    if (!localDb || !selectedChannel) return;
+    if (!otherListener[`chat_${selectedChannel?.id}`]) return;
+
+    try {
+      if (Platform.OS === 'android') {
+        setChannelAsRead(selectedChannel, true);
+        getAllMessages.refetch();
+      } else {
+        queue.addPriorityJob({
+          priority: QueueJobPriority.HIGH,
+          operationLabel: DatabaseOperationLabel.ChatScreen_GetChat,
+          id: selectedChannel?.name,
+          task: async () => {
+            setChannelAsRead(selectedChannel, true);
+            getAllMessages.refetch();
+          }
+        });
+      }
+
+      if (type === 'ANONYMOUS') {
+        if (Platform.OS === 'android') {
+          const userInfo = await UserSchema.getSelfAnonUserInfo(
+            localDb,
+            anonProfileId,
+            selectedChannel?.id
+          );
+          setSelfAnonUserInfo(userInfo);
+        } else {
+          queue.addPriorityJob({
+            priority: QueueJobPriority.MEDIUM,
+            operationLabel: DatabaseOperationLabel.ChatScreen_GetSelfAnonUserInfo,
+            id: selectedChannel?.name,
+            task: async () => {
+              const userInfo = await UserSchema.getSelfAnonUserInfo(
+                localDb,
+                anonProfileId,
+                selectedChannel?.id
+              );
+              setSelfAnonUserInfo(userInfo);
+            }
+          });
+        }
+      }
+    } catch (e) {
+      console.log(e, 'error get all chat');
+    }
+  };
+
+  const handleChatData = async () => {
     if (!localDb || !selectedChannel) return;
     if (!otherListener[`chat_${selectedChannel?.id}`]) return;
 
@@ -174,7 +227,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           );
 
           await currentChatSchema?.save(localDb);
-          initChatData();
+          handleChatData();
         } else {
           currentChatSchema = await ChatSchema.generateSendingChat(
             randomId,
@@ -188,7 +241,7 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           );
 
           await currentChatSchema?.save(localDb);
-          initChatData();
+          handleChatData();
         }
 
         if (selectedChannel) {
@@ -244,11 +297,11 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }
       if (Platform.OS === 'android') {
         await currentChatSchema?.updateChatSentStatus(localDb, response);
-        initChatData();
+        handleChatData();
         refresh('channelList');
       } else {
         await currentChatSchema?.updateChatSentStatus(localDb, response);
-        initChatData();
+        handleChatData();
         refresh('channelList');
       }
     } catch (e) {
@@ -323,6 +376,13 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     if (localDb && selectedChannel) {
       setChannelAsRead(selectedChannel, true);
       initChatData();
+    }
+  }, [localDb, selectedChannel]);
+
+  React.useEffect(() => {
+    if (localDb && selectedChannel) {
+      setChannelAsRead(selectedChannel, true);
+      handleChatData();
     }
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
