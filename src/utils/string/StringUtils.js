@@ -4,7 +4,7 @@ import * as React from 'react';
 import moment from 'moment';
 import reactStringReplace from 'react-string-replace';
 import _, {isArray} from 'lodash';
-import {Linking, Pressable, StyleSheet, Text} from 'react-native';
+import {Linking, StyleSheet, Text} from 'react-native';
 
 import HighlightText from '../../components/HightlightClickText/HighlightText';
 import TaggingUserText from '../../components/TaggingUserText';
@@ -14,7 +14,7 @@ import TopicText from '../../components/TopicText';
 import removePrefixTopic from '../topics/removePrefixTopic';
 import {COLORS} from '../theme';
 import {DEFAULT_PROFILE_PIC_PATH} from '../constants';
-import {fonts} from '../fonts';
+import {LinkableText} from '../../components/LinkableText';
 import {getAnonymousUserId} from '../users';
 import {getUserId} from '../token';
 
@@ -477,11 +477,14 @@ const getCaptionWithTopicStyle = (
   const id = removePrefixTopic(topicWithPrefix);
   const topicRegex = /\B(\#[a-zA-Z0-9_+-]+\b)(?!;)/;
   const validationTextHasAt = /\B(\@[a-zA-Z0-9_+-]+\b)(?!;)/;
+  const urlRegex = /^((?:https?:\/\/)?[^.\/]+(?:\.[^.\/]+)+(?:\/.*)?)(\s*.*)?$/;
+
   if (substringEnd && typeof substringEnd === 'number') {
     text = text.substring(0, substringEnd);
   } else {
     text = text.substring(0, text.length);
   }
+
   substringEnd = Math.round(substringEnd);
   text = reactStringReplace(text, topicRegex, (match) => {
     if (topics?.indexOf(match?.replace('#', '')) > -1)
@@ -508,6 +511,11 @@ const getCaptionWithTopicStyle = (
       isShortText={isShort}
     />
   ));
+
+  text = reactStringReplace(text, urlRegex, (match) => {
+    return <LinkableText text={match} withTopicDetection={true} />;
+  });
+
   return text;
 };
 
