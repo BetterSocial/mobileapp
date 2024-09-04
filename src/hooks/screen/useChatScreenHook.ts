@@ -374,7 +374,6 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
 
   React.useEffect(() => {
     if (localDb && selectedChannel) {
-      setChannelAsRead(selectedChannel, true);
       initChatData();
     }
   }, [localDb, selectedChannel]);
