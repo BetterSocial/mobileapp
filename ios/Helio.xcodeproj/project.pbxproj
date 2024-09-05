@@ -50,7 +50,6 @@
 		845C6E9A2758B16500C9F384 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DCE2758A00C00C9F384 /* Poppins-Thin.ttf */; };
 		845C6E9B2758B16800C9F384 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DBF2758A00B00C9F384 /* Poppins-ThinItalic.ttf */; };
 		845C6E9C2758B16B00C9F384 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 845C6DD52758A00C00C9F384 /* Poppins.ttf */; };
-		8698BDCE5C8CDDD07033DDD6 /* libPods-Helio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A90ECCBB16234A37DB49E834 /* libPods-Helio.a */; };
 		885931912BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */; };
 		885931922BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */; };
 		885931932BA4F89A00170A1C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 885931902BA4F89A00170A1C /* PrivacyInfo.xcprivacy */; };
@@ -144,8 +143,6 @@
 		C417FC742C66288800694FB3 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = C417FC732C66288800694FB3 /* branch.json */; };
 		C417FC752C66288800694FB3 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = C417FC732C66288800694FB3 /* branch.json */; };
 		C417FC762C66288800694FB3 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = C417FC732C66288800694FB3 /* branch.json */; };
-		CC75E2A6EAFCA5CAB546062A /* libPods-Helio-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D12E9075B1F4658A6990E530 /* libPods-Helio-tvOS.a */; };
-		D691F222C974AAB902813853 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7834B6D8ABE31ACDF78E8F99 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		E97154A42976870A0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E97154A52976870B0021A505 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -192,7 +189,6 @@
 		00E356EE1AD99517003FC87E /* HelioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BetterSocialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BetterSocialTests.m; sourceTree = "<group>"; };
-		087885AA8771A89DFA01D326 /* libPods-Helio-HelioDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Helio-HelioDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0893606660594C6581C180EF /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		0FC87512AF510422FCBD22F2 /* Pods-Helio-HelioDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioDev.debug.xcconfig"; path = "Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev.debug.xcconfig"; sourceTree = "<group>"; };
 		104015C011E09B83B0FD7AF8 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -269,7 +265,6 @@
 		97A16B28A6E970AEB8203DA5 /* Pods-Helio-HelioTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioTests.release.xcconfig"; path = "Target Support Files/Pods-Helio-HelioTests/Pods-Helio-HelioTests.release.xcconfig"; sourceTree = "<group>"; };
 		A10C675B47ED4AB0B191600C /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		B5BAA4CB6361443A8DC5D9D0 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		B6C029F35D68C2A3B4E394E9 /* Pods-Helio-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Helio-tvOSTests/Pods-Helio-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		BA74824031AE4396AE9CA127 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		BA7648C284EDB6584F72F743 /* Pods-Helio-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Helio-tvOS/Pods-Helio-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		C377FDF436808AAF4CE93A14 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -305,8 +300,6 @@
 		F87F33DF270D789D003F1E09 /* BetterSocial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BetterSocial.entitlements; path = BetterSocial/BetterSocial.entitlements; sourceTree = "<group>"; };
 		F87F35802717E4C8003F1E09 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		F87F35812717E4C8003F1E09 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
-		FD66503C2FFA4DC243423507 /* Pods-Helio-HelioStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio-HelioStaging.release.xcconfig"; path = "Target Support Files/Pods-Helio-HelioStaging/Pods-Helio-HelioStaging.release.xcconfig"; sourceTree = "<group>"; };
-		FF1A39FBB280D2D49284ADAA /* Pods-Helio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Helio.release.xcconfig"; path = "Target Support Files/Pods-Helio/Pods-Helio.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -719,7 +712,7 @@
 				889CAB6627D46CD6007F5892 /* Resources */,
 				889CAB8627D46CD6007F5892 /* Bundle React Native code and images */,
 				69DAC7B05BF339007CE3E8A3 /* Frameworks */,
-				ADEF5C11C2F682FED9FE6BCE /* [CP] Embed Pods Frameworks */,
+				ADEF5C11C2F682FED9FE6BCE /* [CP-User] [RNFB] Core Configuration */,
 				BDB359CFADFAA49A1E94BAA3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -1407,7 +1400,7 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
-		ADEF5C11C2F682FED9FE6BCE /* [CP] Embed Pods Frameworks */ = {
+		ADEF5C11C2F682FED9FE6BCE /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1425,7 +1418,7 @@
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalOutcomes/OneSignalOutcomes.framework/OneSignalOutcomes",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignalXCFramework/OneSignalUser/OneSignalUser.framework/OneSignalUser",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP-User] [RNFB] Core Configuration";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignalFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignalCore.framework",
@@ -1438,7 +1431,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignalOutcomes.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignalUser.framework",
 			);
-			name = "[CP-User] [RNFB] Core Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Helio-HelioDev/Pods-Helio-HelioDev-frameworks.sh\"\n";
@@ -2183,14 +2175,14 @@
 				CODE_SIGN_ENTITLEMENTS = BetterSocialDevRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.10.121.1102;
+				CURRENT_PROJECT_VERSION = 2.10.123.1102;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.10.121;
+				MARKETING_VERSION = 2.10.123;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2214,14 +2206,14 @@
 				CODE_SIGN_ENTITLEMENTS = BetterSocialDevRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.10.121.1102;
+				CURRENT_PROJECT_VERSION = 2.10.123.1102;
 				DEVELOPMENT_TEAM = J22M3M9VYU;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = "$(SRCROOT)/BetterSocialStaging/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.10.121;
+				MARKETING_VERSION = 2.10.123;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
