@@ -162,7 +162,7 @@ const ChooseUsername = () => {
   const next = () => {
     if (username && username.length >= MINIMUM_USERNAME_LENGTH && typeFetch === 'available') {
       setUsername(username, dispatch);
-      navigation.navigate('LocalCommunity');
+      navigation.navigate('Topics');
     } else {
       if (!username) {
         return showMessage({
@@ -304,7 +304,7 @@ const ChooseUsername = () => {
       <View style={styles.keyboardavoidingview}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.content}>
-            <ProgressBar isStatic={true} value={25} />
+            <ProgressBar isStatic={true} value={33} />
             <Text style={styles.title}>{StringConstant.onboardingChooseUsernameHeadline}</Text>
             <Text style={styles.desc}>{StringConstant.onboardingChooseUsernameSubHeadline}</Text>
             <View style={styles.containerInput}>
