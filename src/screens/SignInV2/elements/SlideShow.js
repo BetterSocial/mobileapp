@@ -86,9 +86,7 @@ const SlideShow = ({handleLogin, onContainerPress = () => {}}) => {
     // },
     {
       isLogin: true,
-      illustrations: FgOnboarding1,
-      title: 'Be Safe',
-      text: <Text style={slideShowStyles.textFontNormal}></Text>
+      illustrations: FgOnboarding1
     }
   ];
   const handleChangeIndex = (swiperData) => {
