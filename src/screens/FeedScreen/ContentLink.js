@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import FastImage from 'react-native-fast-image';
 import BlurredLayer from './elements/BlurredLayer';
 import Card from '../../components/Card/Card';
 import TopicsChip from '../../components/TopicsChip/TopicsChip';
@@ -20,6 +21,7 @@ import {COLORS} from '../../utils/theme';
 import {DISCOVERY_TAB_USERS} from '../../utils/constants';
 import {fonts, normalize, normalizeFontSize, normalizeFontSizeByWidth} from '../../utils/fonts';
 import {smartRender} from '../../utils/Utils';
+import ImageLayouter from './elements/ImageLayouter';
 
 const ContentLink = ({
   item,
@@ -80,23 +82,34 @@ const ContentLink = ({
             <TouchableWithoutFeedback onPress={onPress}>
               {renderMessageContentLink()}
             </TouchableWithoutFeedback>
-            {smartRender(Card, {
-              domain: og.domain,
-              date,
-              domainImage: og.domainImage,
-              title: og.title,
-              description: og.description,
-              image: og.image,
-              url: og.url,
-              onHeaderPress,
-              onCardContentPress,
-              score,
-              item,
-              heightTopic: normalize(60),
-              textHeight,
-              contentHeight: dimen.size.FEED_CONTENT_HEIGHT,
-              containerStyle: {flex: topics.length > 0 ? 0 : 1}
-            })}
+            {item && item?.images_url?.length > 0 ? (
+              <View style={[styles.containerImage(isBlurredPost)]}>
+                <ImageLayouter
+                  mode={FastImage.resizeMode.cover}
+                  isFeed={true}
+                  images={item?.images_url}
+                  onimageclick={() => onPress(item)}
+                />
+              </View>
+            ) : (
+              smartRender(Card, {
+                domain: og.domain,
+                date,
+                domainImage: og.domainImage,
+                title: og.title,
+                description: og.description,
+                image: og.image,
+                url: og.url,
+                onHeaderPress,
+                onCardContentPress,
+                score,
+                item,
+                heightTopic: normalize(60),
+                textHeight,
+                contentHeight: dimen.size.FEED_CONTENT_HEIGHT,
+                containerStyle: {flex: topics.length > 0 ? 0 : 1}
+              })
+            )}
           </>
         </TouchableNativeFeedback>
         {!isBlurredPost && (
@@ -105,7 +118,7 @@ const ContentLink = ({
             topics={topics}
             fontSize={normalizeFontSize(14)}
             text={sanitizeUrl}
-            topicContainer={styles.topicStyle}
+            topicContainer={styles.topicStyle(item?.images_url?.length > 0)}
             topicItemStyle={styles.topicItemStyle}
           />
         )}
@@ -150,11 +163,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0.1,
     color: COLORS.white
   },
-  topicStyle: {
-    position: 'relative',
-    marginLeft: 0
-  },
+  topicStyle: (hasImage) => ({
+    position: hasImage ? 'absolute' : 'relative',
+    marginLeft: hasImage ? 12 : 0,
+    bottom: hasImage ? 4 : 0
+  }),
   topicItemStyle: {
     marginBottom: 0
-  }
+  },
+  containerImage: (isBlurred) => ({
+    flex: 1,
+    height: isBlurred ? dimen.normalizeDimen(422) : 100
+  })
 });

@@ -140,13 +140,18 @@ const CreatePost = () => {
   const animatedReminder = React.useRef(new Animated.Value(0)).current;
   const debounced = React.useCallback(
     debounce((changedText) => {
+      if (mediaStorage.length > 0) {
+        setIsLinkPreviewShown(false);
+        return;
+      }
+
       if (isContainUrl(changedText)) {
         getPreviewUrl(getUrl(changedText));
       } else {
         setIsLinkPreviewShown(false);
       }
     }, 1000),
-    []
+    [mediaStorage]
   );
 
   const [selectedTime, setSelectedTime] = React.useState({
