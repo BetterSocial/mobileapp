@@ -19,6 +19,7 @@ import {sanitizeUrl} from '../../../utils/string/StringUtils';
 import {smartRender} from '../../../utils/Utils';
 import useCalculationContent from '../../../screens/FeedScreen/hooks/useCalculationContent';
 import {listFeedColor} from '../../../configs/FeedColor';
+import MemoLinkDetectionText from '../../Text/LinkDetectionText';
 
 const Content = ({
   message,
@@ -184,16 +185,17 @@ const Content = ({
                   {hashtagAtComponent(message, null, isShortText())}
                 </Text>
               ) : (
-                <Text
-                  style={[
+                <MemoLinkDetectionText
+                  text={message}
+                  withTopicDetection={true}
+                  parentTextStyle={[
                     styles.textContentFeed(isShortText(), parentData?.color),
                     {
                       fontSize: font,
                       lineHeight
                     }
-                  ]}>
-                  {hashtagAtComponent(sanitizeUrl(message), null, isShortText())}{' '}
-                </Text>
+                  ]}
+                />
               )}
             </View>
           </View>
@@ -227,7 +229,15 @@ const Content = ({
             </View>
           </View>
         ) : null}
-        {item && item.post_type === POST_TYPE_LINK && (
+        {item && item.post_type === POST_TYPE_LINK && images_url?.length > 0 ? (
+          <View style={styles.containerImage}>
+            <ImageLayouter
+              mode={FastImage.resizeMode.cover}
+              images={images_url || []}
+              onimageclick={onImageClickedByIndex}
+            />
+          </View>
+        ) : (
           <View
             style={[
               styles.newsCard,
@@ -248,15 +258,6 @@ const Content = ({
               score: item.credderScore,
               item
             })}
-          </View>
-        )}
-        {images_url?.length > 0 && (
-          <View style={styles.containerImage}>
-            <ImageLayouter
-              mode={FastImage.resizeMode.cover}
-              images={images_url || []}
-              onimageclick={onImageClickedByIndex}
-            />
           </View>
         )}
         <TopicsChip
