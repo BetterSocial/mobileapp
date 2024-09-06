@@ -229,15 +229,7 @@ const Content = ({
             </View>
           </View>
         ) : null}
-        {item && item.post_type === POST_TYPE_LINK && images_url?.length > 0 ? (
-          <View style={styles.containerImage}>
-            <ImageLayouter
-              mode={FastImage.resizeMode.cover}
-              images={images_url || []}
-              onimageclick={onImageClickedByIndex}
-            />
-          </View>
-        ) : (
+        {item && item.post_type === POST_TYPE_LINK && images_url?.length === 0 ? (
           <View
             style={[
               styles.newsCard,
@@ -258,6 +250,14 @@ const Content = ({
               score: item.credderScore,
               item
             })}
+          </View>
+        ) : (
+          <View style={styles.containerImage}>
+            <ImageLayouter
+              mode={FastImage.resizeMode.cover}
+              images={images_url || []}
+              onimageclick={onImageClickedByIndex}
+            />
           </View>
         )}
         <TopicsChip
