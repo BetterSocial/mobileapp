@@ -494,20 +494,6 @@ export enum BetterSocialEventTracking {
   // BRANCH
   BRANCH_OPEN_APP = 'Branch-Helio-OpenApp_opened',
 
-  /*
-  FeedPage-MainFeed_incognitoTab_switched
-FeedPage-MainFeed_primaryChatTab_switched
-FeedPage-MainFeed_profileTab_switched
-SignedChat-Chattab_incognitoTab_switched
-SignedChat-Chattab_mainFeedTab_switched
-SignedChat-Chattab_profileTab_switched
-AnonChat-Chattab_mainFeedTab_switched
-AnonChat-Chattab_primaryChatTab_switched
-AnonChat-Chattab_profileTab_switched
-Profile-MyProfile_mainFeedTab_switched
-Profile-MyProfile_primaryChatTab_switched
-Profile-MyProfile_incognitoTab_switched
-*/
   // HOME BOTTOM TABS
   HOME_BOTTOM_TABS_FEED_PAGE_TO_ANON_TAB_CLICKED = 'FeedPage-MainFeed_incognitoTab_switched',
   HOME_BOTTOM_TABS_FEED_PAGE_TO_SIGNED_TAB_CLICKED = 'FeedPage-MainFeed_primaryChatTab_switched',
