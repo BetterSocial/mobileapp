@@ -123,7 +123,7 @@ const Topics = () => {
         <React.Fragment>
           <Header onPress={onBack} />
           <View style={styles.containerProgress}>
-            <ProgressBar isStatic={true} value={75} />
+            <ProgressBar isStatic={true} value={67} />
           </View>
           <View>
             <Text style={styles.textPickYourTopic}>{StringConstant.onboardingTopicsHeadline}</Text>
