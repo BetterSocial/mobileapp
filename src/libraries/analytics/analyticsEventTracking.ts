@@ -179,6 +179,7 @@ export enum BetterSocialEventTracking {
   MAIN_FEED_POST_FOOTER_DOWNVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-downvote_unclicked',
   MAIN_FEED_POST_FOOTER_UPVOTE_REMOVED = 'FeedPage-MainFeed_postInteractions-upvote_unclicked',
   MAIN_FEED_POST_TOPIC_CHIP_CLICKED = 'FeedPage-MainFeed_postInteractions-hashtag_openCP',
+  MAIN_FEED_CREATE_COMMUNITY_BUTTON_CLICKED = 'FeedPage-MainFeed_createCommunityButton_openCreateCommunityPage',
 
   // POST DETAIL PAGE
   PDP_POST_UPVOTE_INSERTED = 'FeedPage-PDP_postInteractions-upvote_upvoted',
@@ -488,9 +489,41 @@ export enum BetterSocialEventTracking {
   CREATE_COMMUNITY_SCREEN_NEXT_BUTTON_OPEN_CC_INTERNAL_SHARE_PAGE = 'CreateCommunity-Customize_customizePage-nextButton_openCC-InternalSharePage',
   CREATE_COMMUNITY_SCREEN_USER_NAME_SELECTED = 'CreateCommunity-InternalShare_userName_selected',
   CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected',
+  CREATE_COMMUNITY_SCREEN_FINISH_BUTTON = 'FeedPage-MainFeed_communityPage-nextButton_openCreateAPostPage',
 
   // BRANCH
-  BRANCH_OPEN_APP = 'Branch-Helio-OpenApp_opened'
+  BRANCH_OPEN_APP = 'Branch-Helio-OpenApp_opened',
+
+  /*
+  FeedPage-MainFeed_incognitoTab_switched
+FeedPage-MainFeed_primaryChatTab_switched
+FeedPage-MainFeed_profileTab_switched
+SignedChat-Chattab_incognitoTab_switched
+SignedChat-Chattab_mainFeedTab_switched
+SignedChat-Chattab_profileTab_switched
+AnonChat-Chattab_mainFeedTab_switched
+AnonChat-Chattab_primaryChatTab_switched
+AnonChat-Chattab_profileTab_switched
+Profile-MyProfile_mainFeedTab_switched
+Profile-MyProfile_primaryChatTab_switched
+Profile-MyProfile_incognitoTab_switched
+*/
+  // HOME BOTTOM TABS
+  HOME_BOTTOM_TABS_FEED_PAGE_TO_ANON_TAB_CLICKED = 'FeedPage-MainFeed_incognitoTab_switched',
+  HOME_BOTTOM_TABS_FEED_PAGE_TO_SIGNED_TAB_CLICKED = 'FeedPage-MainFeed_primaryChatTab_switched',
+  HOME_BOTTOM_TABS_FEED_PAGE_TO_PROFILE_TAB_CLICKED = 'FeedPage-MainFeed_profileTab_switched',
+
+  HOME_BOTTOM_TABS_SIGNED_CHAT_PAGE_TO_ANON_TAB_CLICKED = 'SignedChat-Chattab_incognitoTab_switched',
+  HOME_BOTTOM_TABS_SIGNED_CHAT_PAGE_TO_FEED_TAB_CLICKED = 'SignedChat-Chattab_mainFeedTab_switched',
+  HOME_BOTTOM_TABS_SIGNED_CHAT_PAGE_TO_PROFILE_TAB_CLICKED = 'SignedChat-Chattab_profileTab_switched',
+
+  HOME_BOTTOM_TABS_ANON_CHAT_PAGE_TO_FEED_TAB_CLICKED = 'AnonChat-Chattab_mainFeedTab_switched',
+  HOME_BOTTOM_TABS_ANON_CHAT_PAGE_TO_PRIMARY_TAB_CLICKED = 'AnonChat-Chattab_primaryChatTab_switched',
+  HOME_BOTTOM_TABS_ANON_CHAT_PAGE_TO_PROFILE_TAB_CLICKED = 'AnonChat-Chattab_profileTab_switched',
+
+  HOME_BOTTOM_TABS_PROFILE_PAGE_TO_FEED_TAB_CLICKED = 'Profile-MyProfile_mainFeedTab_switched',
+  HOME_BOTTOM_TABS_PROFILE_PAGE_TO_PRIMARY_TAB_CLICKED = 'Profile-MyProfile_primaryChatTab_switched',
+  HOME_BOTTOM_TABS_PROFILE_PAGE_TO_INCOGNITO_TAB_CLICKED = 'Profile-MyProfile_incognitoTab_switched'
 }
 
 // const ENABLE_TOAST = ENV === 'Dev';
