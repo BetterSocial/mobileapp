@@ -6,7 +6,7 @@ import {
 describe('localCommunityReducer test should pass', () => {
   it('default state should be valid', () => {
     expect(localCommunityState).toEqual({
-      local_community: []
+      local_community: ['61573']
     });
   });
 
@@ -16,7 +16,7 @@ describe('localCommunityReducer test should pass', () => {
       payload: ['test1', 'test2']
     };
     expect(localCommunityReducer(localCommunityState, action)).toEqual({
-      local_community: []
+      local_community: ['61573']
     });
   });
 
