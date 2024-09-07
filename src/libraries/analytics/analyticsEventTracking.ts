@@ -195,6 +195,7 @@ export enum BetterSocialEventTracking {
   PDP_COMMENT_DELETE_ALERT_CANCEL = 'FeedPage-PDP_commentInteractions-cancelDelete_clicked',
   PDP_COMMENT_INPUT_ANON_ON = 'FeedPage-PDP_commentInteractions-anonOn_clicked',
   PDP_COMMENT_INPUT_ANON_OFF = 'FeedPage-PDP_commentInteractions-anonOff_clicked',
+  PDP_COMMENT_SEND_REPLY_BUTTON_CLICKED = 'FeedPage-PDP_sendReply_replied',
 
   // FEED COMMUNITY SCREEN
   FEED_COMMUNITY_PAGE_ON_POST_SCROLLED = 'FeedPage-CP_post_scrolled',
@@ -576,6 +577,12 @@ const AnalyticsEventTracking = (() => {
         segmentUserId: client.userInfo.get()?.userId,
         signedUserId
       } as JsonMap);
+    },
+    setId: (id) => {
+      if (id) {
+        client.userInfo.set({anonymousId: id});
+        client.identify(id);
+      }
     }
   };
 })();

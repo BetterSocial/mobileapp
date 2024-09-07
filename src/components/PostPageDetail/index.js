@@ -289,6 +289,10 @@ const PostPageDetailIdComponent = (props) => {
     } else {
       commentChildren(isAnonimity, anonimityData);
     }
+
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.PDP_COMMENT_SEND_REPLY_BUTTON_CLICKED
+    );
   };
 
   const onCommentButtonClicked = () => {
