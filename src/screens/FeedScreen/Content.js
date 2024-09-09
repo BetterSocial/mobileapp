@@ -7,6 +7,7 @@ import {Dimensions, Platform, Pressable, StyleSheet, Text, View} from 'react-nat
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {useNavigation, useRoute} from '@react-navigation/native';
 
+import FastImage from 'react-native-fast-image';
 import BlurredLayer from './elements/BlurredLayer';
 import ContentPoll from './ContentPoll';
 import ImageLayouter from './elements/ImageLayouter';
@@ -335,6 +336,7 @@ const Content = ({
         {!isBlurredPost && images_url.length > 0 && (
           <View style={[styles.containerImage(isBlurredPost)]}>
             <ImageLayouter
+              mode={FastImage.resizeMode.cover}
               isFeed={true}
               images={images_url}
               onimageclick={() => onPress(showSeeMore)}

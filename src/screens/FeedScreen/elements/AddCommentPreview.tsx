@@ -47,7 +47,8 @@ function AddCommentPreview({
           paddingHorizontal: normalize(12),
           height: normalize(56),
           position: 'absolute',
-          width: '100%'
+          width: '100%',
+          top: -3
         }}>
         <BlurredLayer
           layerOnly

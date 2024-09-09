@@ -17,6 +17,7 @@ import StorageUtils from '../utils/storage';
 import dimen from '../utils/dimen';
 import useAppBadgeHook from '../hooks/appBadge/useAppBadgeHook';
 import useCoreChatSystemHook from '../hooks/core/useCoreChatSystemHook';
+import useHomeTabsAnalyticsHook from '../libraries/analytics/useHomeTabsAnalyticsHook';
 import usePushNotificationHook from '../hooks/core/push-notification/usePushNotificationHook';
 import useRootChannelListHook from '../hooks/screen/useRootChannelListHook';
 import {COLORS} from '../utils/theme';
@@ -35,6 +36,7 @@ function HomeBottomTabs() {
   const navigation = useNavigation();
   const {isLoadingFetchingChannelDetail} = usePushNotificationHook();
   const {updateAppBadgeWith} = useAppBadgeHook();
+  const {onTabClicked} = useHomeTabsAnalyticsHook();
 
   React.useEffect(() => {
     if (otherProfileData !== null && initialStartup.id !== null) {
@@ -105,6 +107,7 @@ function HomeBottomTabs() {
 
   const saveLastMenu = (route) => ({
     tabPress: () => {
+      onTabClicked(route?.name);
       StorageUtils.lastSelectedMenu.set(route?.name);
     }
   });

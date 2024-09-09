@@ -179,13 +179,28 @@ const fetchInitialDiscoveryTopics = async (limit = 50, page = 0) => {
  */
 
 /**
+ * @typedef {Object} FetchInitialDiscoveryUsersOptionalParams
+ * @property {string[]} excudedUserIds
+ * @property {string[]} excludedUserNames
+ */
+
+/**
  * @param {Number} limit
  * @param {Number} page
+ * @param {boolean} isAnon
+ * @param {FetchInitialDiscoveryUsersOptionalParams} optionalParams
  * @returns {FetchInitialDiscoveryUsersResponse}
  */
-const fetchInitialDiscoveryUsers = async (limit = 50, page = 0, isAnon = false) => {
+const fetchInitialDiscoveryUsers = async (
+  limit = 50,
+  page = 0,
+  isAnon = false,
+  optionalParams = {}
+) => {
   const body = {
-    page
+    page,
+    excluded_user_names: optionalParams?.excludedUserNames,
+    excluded_user_ids: optionalParams?.excudedUserIds
   };
 
   if (limit) body.limit = limit;
