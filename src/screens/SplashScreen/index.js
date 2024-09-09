@@ -5,6 +5,7 @@ import {Linking} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/core';
 
+import AnalyticsEventTracking from '../../libraries/analytics/analyticsEventTracking';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import TokenStorage, {ITokenEnum} from '../../utils/storage/custom/tokenStorage';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
@@ -51,6 +52,8 @@ const SplashScreen = () => {
       const anonymousUserId = await getAnonymousUserId();
       const token = TokenStorage.get(ITokenEnum.token);
       const anonymousToken = TokenStorage.get(ITokenEnum.anonymousToken);
+
+      AnalyticsEventTracking.setId(id);
 
       setAuth({
         anonProfileId: anonymousUserId,

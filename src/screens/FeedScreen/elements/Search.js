@@ -1,13 +1,16 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Animated, Pressable} from 'react-native';
+import {Animated, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import IconSearch from '../../../assets/icons/Ic_search';
 import IconTopic from '../../../assets/icons/ic_topic';
 import StringConstant from '../../../utils/string/StringConstant';
-import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {COLORS, SIZES} from '../../../utils/theme';
 import dimen from '../../../utils/dimen';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
+import {COLORS, SIZES} from '../../../utils/theme';
+import {fonts, normalizeFontSize} from '../../../utils/fonts';
 
 const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout}) => {
   const navigation = useNavigation();
@@ -17,6 +20,14 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
     if (getSearchLayout) {
       getSearchLayout(height);
     }
+  };
+
+  const onCreateCommunityClicked = () => {
+    AnalyticsEventTracking.eventTrack(
+      BetterSocialEventTracking.MAIN_FEED_CREATE_COMMUNITY_BUTTON_CLICKED
+    );
+
+    navigation.navigate('CreateCommunity');
   };
 
   return (
@@ -30,7 +41,7 @@ const Search = ({animatedValue, onContainerClicked = () => {}, getSearchLayout})
             <Text style={styles.inputText}>{StringConstant.discoverySearchBarPlaceholder}</Text>
           </View>
         </Pressable>
-        <Pressable onPress={() => navigation.navigate('CreateCommunity')} style={styles.btnCreate}>
+        <Pressable onPress={onCreateCommunityClicked} style={styles.btnCreate}>
           <IconTopic fill={COLORS.signed_primary} />
           <Text style={styles.btnCreateText}>Start a new{'\n'}community</Text>
         </Pressable>

@@ -108,6 +108,7 @@ const SignIn = () => {
         try {
           const userId = await JwtDecode(token).user_id;
           const anonymousUserId = await JwtDecode(anonymousToken).user_id;
+          AnalyticsEventTracking.setId(userId);
           setAuth({
             anonProfileId: anonymousUserId,
             signedProfileId: userId,
