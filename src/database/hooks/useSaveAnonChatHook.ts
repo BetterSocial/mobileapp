@@ -1,3 +1,4 @@
+import React from 'react';
 import {v4 as uuid} from 'uuid';
 
 import ChannelListSchema from '../schema/ChannelListSchema';
@@ -6,18 +7,24 @@ import UserSchema from '../schema/UserSchema';
 import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useLocalDatabaseHook from './useLocalDatabaseHook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
+import {ANON_PM, GROUP_INFO, SIGNED} from '../../hooks/core/constant';
+import {AnonUserInfo} from '../../../types/service/AnonProfile.type';
 import {ChannelList} from '../../../types/database/schema/ChannelList.types';
-import {GROUP_INFO, SIGNED} from '../../hooks/core/constant';
 import {
   InitAnonymousChatData,
   ModifyAnonymousChatData
 } from '../../../types/repo/AnonymousMessageRepo/InitAnonymousChatData';
 import {getChannelListInfo} from '../../utils/string/StringUtils';
+import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../service/chat';
 
-const useSaveAnonChatHook = () => {
+const CHANNEL_BLOCKED = 'Channel is blocked';
+
+const useSaveAnonChatHook = (eventTrack: any) => {
   const {localDb, refresh, refreshWithId} = useLocalDatabaseHook();
   const {goToChatScreen} = useChatUtilsHook();
   const {signedProfileId, anonProfileId} = useUserAuthHook();
+
+  const [isLoadingSendDm, setIsLoadingSendDm] = React.useState(false);
 
   const helperFindChatById = async (
     object: InitAnonymousChatData
@@ -121,10 +128,110 @@ const useSaveAnonChatHook = () => {
     );
   };
 
+  const sendChatFromOtherProfileV2 = async (params: SendChatFromOtherProfileParams) => {
+    const {
+      isAnonymous,
+      targetUserId,
+      message,
+      anonUserInfo,
+      channelIdAsSignedUser,
+      channelIdAsAnonUser
+    } = params;
+
+    if (!targetUserId || !message) throw new Error('sendChatFromOtherProfile params is invalid');
+
+    // Get channel based on channel id from other profile response
+    let checkedChannel: ChannelListSchema | null = null;
+    if (isAnonymous && channelIdAsAnonUser) {
+      checkedChannel = await ChannelListSchema.getById(localDb, channelIdAsAnonUser);
+    } else if (!isAnonymous && channelIdAsSignedUser) {
+      checkedChannel = await ChannelListSchema.getById(localDb, channelIdAsSignedUser);
+    }
+
+    const randomMessageId = uuid();
+
+    // If channel is found, save chat as pending, then navigate to chat screen
+    let currentChatSchema: ChatSchema | null = null;
+    if (checkedChannel) {
+      currentChatSchema = await ChatSchema.generateSendingChat(
+        randomMessageId,
+        (isAnonymous ? anonProfileId : signedProfileId) || '',
+        checkedChannel?.id,
+        message,
+        [],
+        localDb,
+        'regular',
+        'pending'
+      );
+
+      await currentChatSchema?.save(localDb);
+
+      helperGoToAnonymousChat(
+        {
+          message: {
+            cid: checkedChannel?.id
+          }
+        },
+        GROUP_INFO
+      );
+    }
+
+    if (!checkedChannel) setIsLoadingSendDm(true);
+    if (isAnonymous) {
+      try {
+        const response = await sendAnonymousDMOtherProfile({
+          anon_user_info_emoji_name: anonUserInfo?.anon_user_info_emoji_name,
+          anon_user_info_emoji_code: anonUserInfo?.anon_user_info_emoji_code,
+          anon_user_info_color_name: anonUserInfo?.anon_user_info_color_name,
+          anon_user_info_color_code: anonUserInfo?.anon_user_info_color_code,
+          message,
+          user_id: targetUserId
+        });
+        eventTrack?.onBioSendDm();
+        if (checkedChannel) currentChatSchema?.updateChatSentStatus(localDb, response);
+        else await saveChatFromOtherProfile(response, 'sent', !checkedChannel, ANON_PM);
+      } catch (e) {
+        console.log('error send anon dm', e);
+        if (e?.response?.data?.status === CHANNEL_BLOCKED) {
+          const response = e?.response?.data?.data;
+          await savePendingChatFromOtherProfile(response, !checkedChannel, ANON_PM);
+        }
+      }
+    } else {
+      try {
+        const response = await sendSignedDMOtherProfile({
+          message,
+          user_id: targetUserId
+        });
+
+        eventTrack?.onBioSendDm();
+
+        const newResponse = {...response, members: response?.message?.members};
+        if (checkedChannel) currentChatSchema?.updateChatSentStatus(localDb, response);
+        else await saveChatFromOtherProfile(newResponse, 'sent', !checkedChannel, SIGNED);
+      } catch (e) {
+        console.log('error send signed dm', e);
+      }
+    }
+    setIsLoadingSendDm(false);
+  };
+
   return {
+    isLoadingSendDm,
+
     saveChatFromOtherProfile,
-    savePendingChatFromOtherProfile
+    savePendingChatFromOtherProfile,
+    sendChatFromOtherProfileV2,
+    setIsLoadingSendDm
   };
 };
 
 export default useSaveAnonChatHook;
+export type SendChatFromOtherProfileParams = {
+  isAnonymous: boolean;
+  targetUserId: string;
+  message: string;
+  anonUserInfo?: AnonUserInfo;
+  channelIdAsSignedUser?: string;
+  channelIdAsAnonUser?: string;
+};

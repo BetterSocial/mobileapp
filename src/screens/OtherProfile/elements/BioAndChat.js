@@ -7,13 +7,9 @@ import MemoLinkDetectionText from '../../../components/Text/LinkDetectionText';
 import TextAreaChat from '../../../components/TextAreaChat';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import useSaveAnonChatHook from '../../../database/hooks/useSaveAnonChatHook';
-import {ANON_PM, SIGNED} from '../../../hooks/core/constant';
 import {COLORS} from '../../../utils/theme';
 import {Loading} from '../../../components';
 import {fonts, normalizeFontSize} from '../../../utils/fonts';
-import {sendAnonymousDMOtherProfile, sendSignedDMOtherProfile} from '../../../service/chat';
-
-const CHANNEL_BLOCKED = 'Channel is blocked';
 
 const BioAndChat = (props) => {
   const {
@@ -34,9 +30,9 @@ const BioAndChat = (props) => {
     }
   } = props;
   const navigation = useNavigation();
-  const {saveChatFromOtherProfile, savePendingChatFromOtherProfile} = useSaveAnonChatHook();
+  const {isLoadingSendDm, sendChatFromOtherProfileV2, setIsLoadingSendDm} =
+    useSaveAnonChatHook(eventTrack);
   const [dmChat, setDmChat] = React.useState('');
-  const [loadingSendDM, setLoadingSendDM] = React.useState(false);
 
   React.useEffect(() => {
     setDmChat('');
@@ -46,7 +42,7 @@ const BioAndChat = (props) => {
     const unsubscribe = navigation.addListener('blur', () => {
       setTimeout(() => {
         setDmChat('');
-        setLoadingSendDM(false);
+        setIsLoadingSendDm(false);
       }, 500);
     });
 
@@ -55,67 +51,24 @@ const BioAndChat = (props) => {
     };
   }, []);
 
-  const sendSignedDM = async () => {
-    try {
-      setLoadingSendDM(true);
-      const signedMParams = {
-        user_id: dataMain.user_id,
-        message: dmChat
-      };
-      const response = await sendSignedDMOtherProfile(signedMParams);
-      eventTrack.onBioSendDm();
-      const newResponse = {...response, members: response?.message?.members};
-      await saveChatFromOtherProfile(newResponse, 'sent', true, SIGNED);
-    } catch (error) {
-      setLoadingSendDM(false);
-      if (__DEV__) {
-        console.log(error, 'error');
-      }
-    }
-  };
-
-  const sentAnonDM = async () => {
-    try {
-      setLoadingSendDM(true);
-      const {
-        anon_user_info_emoji_name,
-        anon_user_info_emoji_code,
-        anon_user_info_color_name,
-        anon_user_info_color_code
-      } = anonProfile ?? {};
-
-      const anonDMParams = {
-        user_id: dataMain.user_id,
-        message: dmChat,
-        anon_user_info_emoji_name,
-        anon_user_info_emoji_code,
-        anon_user_info_color_name,
-        anon_user_info_color_code
-      };
-      const response = await sendAnonymousDMOtherProfile(anonDMParams);
-      await saveChatFromOtherProfile(response, 'sent', true, ANON_PM);
-    } catch (e) {
-      if (e?.response?.data?.status === CHANNEL_BLOCKED) {
-        const response = e?.response?.data?.data;
-        await savePendingChatFromOtherProfile(response, 'pending', true, ANON_PM);
-        return;
-      }
-
-      setLoadingSendDM(false);
-    }
-  };
-
   const onSendDM = async () => {
-    if (isAnonimity) {
-      await sentAnonDM();
-    } else {
-      await sendSignedDM();
+    try {
+      await sendChatFromOtherProfileV2({
+        isAnonymous: isAnonimity,
+        targetUserId: dataMain.user_id,
+        message: dmChat,
+        anonUserInfo: anonProfile,
+        channelIdAsSignedUser: dataMain?.signedChannelIdWithTargetUser,
+        channelIdAsAnonUser: dataMain?.anonymousChannelIdWithTargetUser
+      });
+    } catch (e) {
+      console.log('error send dm', e);
     }
   };
 
   return (
     <View style={styles.bioAndSendChatContainer}>
-      <Loading visible={loadingSendDM} />
+      <Loading visible={isLoadingSendDm} />
       <View style={styles.containerBio}>
         {bio === null || bio === undefined || bio === '' ? (
           <Text style={styles.bioText}>Send a message</Text>
@@ -138,7 +91,7 @@ const BioAndChat = (props) => {
           disabledInput={!isSignedMessageEnabled}
           onSend={onSendDM}
           onChangeMessage={setDmChat}
-          disabledButton={loadingSendDM || !isSignedMessageEnabled || loadingGenerateAnon}
+          disabledButton={isLoadingSendDm || !isSignedMessageEnabled || loadingGenerateAnon}
           defaultValue={
             isSignedMessageEnabled ? dmChat : `Only users ${username} follows can send messages`
           }
