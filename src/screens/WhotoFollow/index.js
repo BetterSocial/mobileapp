@@ -220,6 +220,7 @@ const WhotoFollow = () => {
           try {
             const userId = await JwtDecode(res.token).user_id;
             const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
+            AnalyticsEventTracking.setId(userId);
             setAuth({
               anonProfileId: anonymousUserId,
               signedProfileId: userId,
