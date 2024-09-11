@@ -75,13 +75,13 @@
 		<dict/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This lets you using camera from your device securely.</string>
+	<string>Helio uses your device's camera to help you take photos and record videos to post, send in chats, or otherwise share with other users.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Requires user location for better experience</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This lets you upload photos from your device securely.</string>
+	<string>Helio uses your camera roll to help you share photos and videos to post, send in chats, or otherwise share with other users.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This lets you upload photos from your device securely.</string>
+	<string>Helio uses your camera roll to help you share photos and videos to post, send in chats, or otherwise share with other users.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SFProText-Regular.ttf</string>
