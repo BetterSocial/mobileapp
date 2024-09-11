@@ -258,6 +258,19 @@ const getAllowAnonDmStatus = async (type, id) => {
   }
 };
 
+const checkValidUrl = async (url) => {
+  try {
+    const response = await api.get(url);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject(response.data);
+  } catch (e) {
+    if (e?.response?.data?.message) return Promise.reject(e?.response?.data?.message);
+    return Promise.reject(e);
+  }
+};
+
 const initChatFromPostAnon = async ({source, id, feedId}) => {
   let payload = {source};
   switch (source) {
@@ -413,5 +426,6 @@ export {
   leaveGroup,
   resendPendingMessages,
   useSendSignedMessage,
-  useSendAnonMessage
+  useSendAnonMessage,
+  checkValidUrl
 };
