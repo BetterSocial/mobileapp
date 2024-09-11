@@ -14,7 +14,6 @@ import UserSchema from '../../database/schema/UserSchema';
 import currentChatScreenAtom from '../../atom/currentChatScreenAtom';
 import useAnalyticUtilsHook from '../../libraries/analytics/useAnalyticUtilsHook';
 import useChatUtilsHook from '../core/chat/useChatUtilsHook';
-import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../core/auth/useUserAuthHook';
 import ImageUtils, {UploadOptions} from '../../utils/image';
@@ -23,12 +22,13 @@ import UseChatScreenHook, {
 } from '../../../types/hooks/screens/useChatScreenHook.types';
 import {BetterSocialEventTracking} from '../../libraries/analytics/analyticsEventTracking';
 import {CHANNEL_TYPE_GROUP, CHANNEL_TYPE_PERSONAL} from '../../utils/constants';
-import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
-import {QueueJobPriority} from '../../core/queue/BaseQueue';
 import {getAnonymousUserId, getUserId} from '../../utils/users';
 import {randomString} from '../../utils/string/StringUtils';
 import {useGetAllMessage} from './services/chatScreenHooks';
 import {useSendAnonMessage, useSendSignedMessage} from '../../service/chat';
+import {QueueJobPriority} from '../../core/queue/BaseQueue';
+import {DatabaseOperationLabel} from '../../core/queue/DatabaseQueue';
+import useDatabaseQueueHook from '../core/queue/useDatabaseQueueHook';
 
 interface ScrollContextProps {
   selectedMessageId: string | null;
@@ -123,6 +123,25 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
     }
   };
 
+  const handleChatData = async () => {
+    if (!localDb || !selectedChannel) return;
+    if (!otherListener[`chat_${selectedChannel?.id}`]) return;
+
+    try {
+      getAllMessages.refetch();
+      if (type === 'ANONYMOUS') {
+        const userInfo = await UserSchema.getSelfAnonUserInfo(
+          localDb,
+          anonProfileId,
+          selectedChannel?.id
+        );
+        setSelfAnonUserInfo(userInfo);
+      }
+    } catch (e) {
+      console.log(e, 'error get all chat');
+    }
+  };
+
   const processImageAttachment = async (item) => {
     const uploadedImageUrl = await ImageUtils.uploadImage(item.asset_url, uploadMediaFailedEvent);
     return {...item, asset_url: uploadedImageUrl.data.url, thumb_url: uploadedImageUrl.data.url};
@@ -208,29 +227,21 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
           );
 
           await currentChatSchema?.save(localDb);
-          initChatData();
+          handleChatData();
         } else {
-          queue.addPriorityJob({
-            operationLabel: DatabaseOperationLabel.ChatScreen_SendChat,
-            id: `${selectedChannel?.id}-${new Date().valueOf()}`,
-            priority: QueueJobPriority.HIGH,
-            forceAddToQueue: true,
-            task: async () => {
-              currentChatSchema = await ChatSchema.generateSendingChat(
-                randomId,
-                userId,
-                selectedChannel?.id || '',
-                message,
-                attachments,
-                localDb,
-                'regular',
-                'pending'
-              );
+          currentChatSchema = await ChatSchema.generateSendingChat(
+            randomId,
+            userId,
+            selectedChannel?.id || '',
+            message,
+            attachments,
+            localDb,
+            'regular',
+            'pending'
+          );
 
-              await currentChatSchema?.save(localDb);
-              initChatData();
-            }
-          });
+          await currentChatSchema?.save(localDb);
+          handleChatData();
         }
 
         if (selectedChannel) {
@@ -247,24 +258,17 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
               refresh('channelList');
             }
           } else {
-            queue.addPriorityJob({
-              operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChannelDescription,
-              id: `${selectedChannel?.id}-${randomId}`,
-              priority: QueueJobPriority.HIGH,
-              task: async () => {
-                const channelList: ChannelList | null = await ChannelList.getSchemaById(
-                  localDb,
-                  selectedChannel?.id
-                );
-                if (channelList) {
-                  channelList.description = message;
-                  channelList.lastUpdatedBy = userId;
-                  channelList.lastUpdatedAt = new Date().toISOString();
-                  await channelList.save(localDb);
-                  refresh('channelList');
-                }
-              }
-            });
+            const channelList: ChannelList | null = await ChannelList.getSchemaById(
+              localDb,
+              selectedChannel?.id
+            );
+            if (channelList) {
+              channelList.description = message;
+              channelList.lastUpdatedBy = userId;
+              channelList.lastUpdatedAt = new Date().toISOString();
+              await channelList.save(localDb);
+              refresh('channelList');
+            }
           }
         }
       }
@@ -293,20 +297,12 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
       }
       if (Platform.OS === 'android') {
         await currentChatSchema?.updateChatSentStatus(localDb, response);
-        initChatData();
+        handleChatData();
         refresh('channelList');
       } else {
-        queue.addPriorityJob({
-          operationLabel: DatabaseOperationLabel.ChatScreen_UpdateChatSentStatus,
-          id: `${selectedChannel?.id}-${randomId}`,
-          priority: QueueJobPriority.HIGH,
-          forceAddToQueue: true,
-          task: async () => {
-            await currentChatSchema?.updateChatSentStatus(localDb, response);
-            initChatData();
-            refresh('channelList');
-          }
-        });
+        await currentChatSchema?.updateChatSentStatus(localDb, response);
+        handleChatData();
+        refresh('channelList');
       }
     } catch (e) {
       console.log('[ERROR] error sending chat', e);
@@ -379,6 +375,13 @@ function useChatScreenHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatScreenHook {
   React.useEffect(() => {
     if (localDb && selectedChannel) {
       initChatData();
+    }
+  }, [localDb, selectedChannel]);
+
+  React.useEffect(() => {
+    if (localDb && selectedChannel) {
+      setChannelAsRead(selectedChannel, true);
+      handleChatData();
     }
   }, [localDb, otherListener[`chat_${selectedChannel?.id}`], selectedChannel]);
 
