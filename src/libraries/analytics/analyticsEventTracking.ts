@@ -1,9 +1,55 @@
 import SimpleToast from 'react-native-simple-toast';
 /* eslint-disable no-shadow */
-import {JsonMap, createClient} from '@segment/analytics-react-native';
+import {JsonMap, SegmentClient, createClient} from '@segment/analytics-react-native';
+import {Mixpanel} from 'mixpanel-react-native';
 
 import StorageUtils from '../../utils/storage';
-import {ENABLE_SEGMENT, ENV, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
+import {ENABLE_SEGMENT, MIXPANEL_TOKEN, SEGMENT_WRITE_KEY} from '../Configs/ENVConfig';
+
+let MIXPANEL_INSTANCE: Mixpanel | null = null;
+let SEGMENT_INSTANCE: SegmentClient | null = null;
+
+function getAnalyticsInstance(userId?: string) {
+  SEGMENT_INSTANCE = createClient({
+    writeKey: SEGMENT_WRITE_KEY || '',
+    debug: __DEV__,
+    trackAppLifecycleEvents: true,
+    trackDeepLinks: true
+  });
+
+  const trackAutomaticEvents = false;
+  MIXPANEL_INSTANCE = new Mixpanel(MIXPANEL_TOKEN || '', trackAutomaticEvents);
+  MIXPANEL_INSTANCE.init();
+
+  let profile: {username: string; id: string} | null = null;
+
+  try {
+    const profileStorage = StorageUtils.profileData.get();
+    profile = JSON.parse(profileStorage || '{}');
+  } catch (e) {
+    console.log('Error getting profile data', e);
+  }
+
+  try {
+    if (userId) {
+      SEGMENT_INSTANCE.userInfo.set({
+        anonymousId: userId,
+        userId,
+        traits: {name: profile?.username, id: userId}
+      });
+
+      MIXPANEL_INSTANCE.identify(userId);
+      MIXPANEL_INSTANCE.getPeople().set('$name', profile?.username);
+    }
+  } catch (e) {
+    console.log('Error getting signed user id', e);
+  }
+
+  return {
+    segmentClient: SEGMENT_INSTANCE,
+    mixpanel: MIXPANEL_INSTANCE
+  };
+}
 
 /**
  * Please refer to this for all tracking enums.
@@ -517,6 +563,11 @@ export enum BetterSocialEventTracking {
   HOME_BOTTOM_TABS_PROFILE_PAGE_TO_INCOGNITO_TAB_CLICKED = 'Profile-MyProfile_incognitoTab_switched'
 }
 
+export type AnalyticsProfile = {
+  username: string;
+  id: string;
+};
+
 // const ENABLE_TOAST = ENV === 'Dev';
 const ENABLE_TOAST = false;
 
@@ -537,18 +588,11 @@ const AnalyticsEventTracking = (() => {
     };
   }
 
-  const client = createClient({
-    writeKey: SEGMENT_WRITE_KEY || '',
-    debug: __DEV__,
-    trackAppLifecycleEvents: true,
-    trackDeepLinks: true
-  });
-
   return {
-    eventTrack: (
-      event: BetterSocialEventTracking | string,
-      additionalData?: object
-    ): Promise<void> => {
+    eventTrack: (event: BetterSocialEventTracking, additionalData?: object): Promise<void> => {
+      const signedUserId = StorageUtils.signedUserId.get();
+      const {segmentClient: client} = getAnalyticsInstance(signedUserId);
+
       if (!event) {
         console.error('Event must be defined');
         return Promise.resolve();
@@ -558,38 +602,43 @@ const AnalyticsEventTracking = (() => {
         return Promise.resolve();
       }
 
-      let signedUserId: string | null = null;
-      try {
-        const profileJson = JSON.parse(StorageUtils.profileData.get() || '{}');
-        signedUserId = profileJson?.user_id;
-        console.log('profileJson', profileJson?.user_id);
-      } catch (e) {
-        console.log('Error getting profile data', e);
-      }
-
       if (!additionalData) {
         if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY) SimpleToast.show(event);
         return client.track(event, {
           segmentAnonymousId: client.userInfo.get()?.anonymousId,
-          segmentUserId: client.userInfo.get()?.userId,
+          segmentUserId: signedUserId,
           signedUserId
         });
       }
 
       if (ENABLE_TOAST && !!SEGMENT_WRITE_KEY)
         SimpleToast.show(`${event} ${JSON.stringify(additionalData || {})}`);
+
       return client.track(event, {
         ...(additionalData || {}),
         segmentAnonymousId: client.userInfo.get()?.anonymousId,
-        segmentUserId: client.userInfo.get()?.userId,
+        segmentUserId: signedUserId,
         signedUserId
       } as JsonMap);
     },
-    setId: (id) => {
-      if (id) {
-        client.userInfo.set({anonymousId: id});
-        client.identify(id);
-      }
+
+    setId: (profile: AnalyticsProfile) => {
+      MIXPANEL_INSTANCE = null;
+      SEGMENT_INSTANCE = null;
+      getAnalyticsInstance(profile?.id);
+    },
+
+    resetId: () => {
+      const signedUserId = StorageUtils.signedUserId.get();
+      const {mixpanel, segmentClient: client} = getAnalyticsInstance(signedUserId);
+
+      mixpanel.reset();
+      client.identify(undefined);
+      client.reset(true);
+      StorageUtils.signedUserId.clear();
+
+      MIXPANEL_INSTANCE = null;
+      SEGMENT_INSTANCE = null;
     }
   };
 })();

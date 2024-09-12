@@ -69,6 +69,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "metro-config": "^0.73.3",
+    "mixpanel-react-native": "^3.0.6",
     "moment": "^2.29.1",
     "patch-package": "^7.0.0",
     "psl": "^1.9.0",

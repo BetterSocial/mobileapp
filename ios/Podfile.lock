@@ -141,7 +141,12 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - Mixpanel (5.0.7)
+  - Mixpanel-swift (4.3.0):
+    - Mixpanel-swift/Complete (= 4.3.0)
+  - Mixpanel-swift/Complete (4.3.0)
+  - MixpanelReactNative (3.0.6):
+    - Mixpanel-swift (= 4.3.0)
+    - React-Core
   - MMKV (1.3.3):
     - MMKVCore (~> 1.3.3)
   - MMKVCore (1.3.3)
@@ -642,7 +647,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - "human-id-react-native-humanid (from `../node_modules/@human-internet/react-native-humanid`)"
-  - Mixpanel
+  - MixpanelReactNative (from `../node_modules/mixpanel-react-native`)
   - OneSignalXCFramework (< 6.0, >= 5.2.3)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera`)
   - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary`)
@@ -744,7 +749,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUtilities
     - libwebp
-    - Mixpanel
+    - Mixpanel-swift
     - MMKV
     - MMKVCore
     - nanopb
@@ -772,6 +777,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   human-id-react-native-humanid:
     :path: "../node_modules/@human-internet/react-native-humanid"
+  MixpanelReactNative:
+    :path: "../node_modules/mixpanel-react-native"
   Permission-Camera:
     :path: "../node_modules/react-native-permissions/ios/Camera"
   Permission-PhotoLibrary:
@@ -950,7 +957,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   human-id-react-native-humanid: a8e19a9a4c2f052843ca29f2ec29040ba9a4a55d
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  Mixpanel: 25b7ccefcd20749841db42295c5dba4ed89a805e
+  Mixpanel-swift: 2192b9a24cf41b870749e4e0e10fbc9822bb2b4a
+  MixpanelReactNative: 429e2f1c7d4e9a56d082f03df0a6963206eafc9f
   MMKV: f902fb6719da13c2ab0965233d8963a59416f911
   MMKVCore: d26e4d3edd5cb8588c2569222cbd8be4231374e9
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
@@ -1040,6 +1048,6 @@ SPEC CHECKSUMS:
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: d1fc3575b8b68891ff5ef3c276daa855e841eb32
 
-PODFILE CHECKSUM: dc3d4dc03f1060265b0a211d71494ce2d0b640a2
+PODFILE CHECKSUM: 67c08238e63b9a8a2d3547b76bf1f60d6611d3fc
 
 COCOAPODS: 1.15.2

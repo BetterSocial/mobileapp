@@ -177,9 +177,12 @@ const DevDummyLogin = ({resetClickTime = () => {}}) => {
         if (response.data) {
           TokenStorage.set(response);
 
-          const userId = await JwtDecode(response.token).user_id;
+          const profile = await JwtDecode(response.token);
+          const userId = profile?.user_id;
           const anonymousUserId = await JwtDecode(response.anonymousToken).user_id;
-          AnalyticsEventTracking.setId(userId);
+          StorageUtils.signedUserId.set(userId);
+          StorageUtils.anonymousUserId.set(anonymousUserId);
+          AnalyticsEventTracking.setId(profile);
           setAuth({
             anonProfileId: anonymousUserId,
             signedProfileId: userId,
