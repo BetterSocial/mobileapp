@@ -5,30 +5,31 @@ import {LogBox, Platform, StatusBar} from 'react-native';
 import {useLocalChannelsFirst} from 'stream-chat-react-native';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 
+import AnalyticsEventTracking from '../libraries/analytics/analyticsEventTracking';
 import DiscoveryAction from '../context/actions/discoveryAction';
 import DiscoveryRepo from '../service/discovery';
+import StorageUtils from '../utils/storage';
 import following from '../context/actions/following';
 import streamFeed from '../utils/getstream/streamer';
+import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
 import useFeedService from './useFeedService';
 import useResetContext from './context/useResetContext';
 import TokenStorage, {ITokenEnum} from '../utils/storage/custom/tokenStorage';
 import {Analytics} from '../libraries/analytics/firebaseAnalytics';
+import {COLORS} from '../utils/theme';
 import {Context} from '../context';
-import {NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
 import {InitialStartupAtom} from '../service/initialStartup';
+import {NEWS_CACHE, PROFILE_CACHE, RECENT_SEARCH_TERMS} from '../utils/cache/constant';
+import {addIFollowByID, setNews} from '../context/actions/news';
 import {channelListLocalAtom} from '../service/channelListLocal';
 import {getDomains, getFollowedDomain} from '../service/domain';
 import {getFollowing, getMyProfile} from '../service/profile';
 import {getFollowingTopic} from '../service/topics';
 import {getSpecificCache, saveToCache} from '../utils/cache';
-import {setTimer} from '../context/actions/feeds';
 import {setMyProfileAction} from '../context/actions/setMyProfileAction';
-import {addIFollowByID, setNews} from '../context/actions/news';
+import {setTimer} from '../context/actions/feeds';
 import {traceMetricScreen} from '../libraries/performance/firebasePerformance';
 import {useClientGetstream} from '../utils/getstream/ClientGetStram';
-import useCoreFeed from '../screens/FeedScreen/hooks/useCoreFeed';
-import StorageUtils from '../utils/storage';
-import {COLORS} from '../utils/theme';
 
 export const useInitialStartup = () => {
   const [, newsDispatch] = React.useContext(Context).news;
@@ -85,6 +86,7 @@ export const useInitialStartup = () => {
       }
       const profile = await getMyProfile();
       StorageUtils.profileData.set(JSON.stringify(profile.data));
+      AnalyticsEventTracking.setId(profile.data);
       setMyProfileAction(profile.data, dispatchProfile);
       setLoadingUser(false);
     } catch (e) {

@@ -20,6 +20,7 @@ import ImageUtils from '../../utils/image';
 import ItemUser from './elements/ItemUser';
 import Label from './elements/Label';
 import Loading from '../Loading';
+import StorageUtils from '../../utils/storage';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import dimen from '../../utils/dimen';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
@@ -218,9 +219,14 @@ const WhotoFollow = () => {
           TokenStorage.set(res);
           setToken(res.token);
           try {
-            const userId = await JwtDecode(res.token).user_id;
+            const profile = await JwtDecode(res.token);
+            const userId = profile?.user_id;
             const anonymousUserId = await JwtDecode(res.anonymousToken).user_id;
-            AnalyticsEventTracking.setId(userId);
+
+            StorageUtils.signedUserId.set(userId);
+            StorageUtils.anonymousUserId.set(anonymousUserId);
+
+            AnalyticsEventTracking.setId(profile);
             setAuth({
               anonProfileId: anonymousUserId,
               signedProfileId: userId,
