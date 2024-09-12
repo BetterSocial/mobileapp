@@ -538,6 +538,10 @@ export enum BetterSocialEventTracking {
   CREATE_COMMUNITY_SCREEN_USER_NAME_UNSELECTED = 'CreateCommunity-InternalShare_userName_unselected',
   CREATE_COMMUNITY_SCREEN_FINISH_BUTTON = 'FeedPage-MainFeed_communityPage-nextButton_openCreateAPostPage',
 
+  // PUSH NOTIFICATIONS
+  ONE_SIGNAL_PUSH_NOTIFICATIONS = 'PN_OS_',
+  BACKEND_PUSH_NOTIFICATIONS = 'PN_BE_',
+
   // BRANCH
   BRANCH_OPEN_APP = 'Branch-Helio-OpenApp_opened',
 
@@ -588,7 +592,6 @@ const AnalyticsEventTracking = (() => {
     eventTrack: (event: BetterSocialEventTracking, additionalData?: object): Promise<void> => {
       const signedUserId = StorageUtils.signedUserId.get();
       const {segmentClient: client} = getAnalyticsInstance(signedUserId);
-      console.log('signedUserId', signedUserId);
 
       if (!event) {
         console.error('Event must be defined');
