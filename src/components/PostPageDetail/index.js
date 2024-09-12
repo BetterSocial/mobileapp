@@ -627,6 +627,7 @@ const PostPageDetailIdComponent = (props) => {
             isPostDetail={true}
             hideThreeDot={false}
             props={item}
+            item={item}
             isBackButton={true}
             source={SOURCE_PDP}
             height={getHeightHeader()}

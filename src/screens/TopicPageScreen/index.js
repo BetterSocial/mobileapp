@@ -287,14 +287,15 @@ const TopicPageScreen = (props) => {
   };
 
   const onPress = (item, haveSeeMore) => {
-    props.navigation.navigate('PostDetailPage', {
-      feedId: item.id,
+    const data = {
+      feedId: item?.id,
       isalreadypolling: item.isalreadypolling,
       from: 'topic',
       isCaching: true,
       haveSeeMore,
       data: item
-    });
+    };
+    props.navigation.navigate('PostDetailPage', data);
   };
 
   const onPressComment = (item, haveSeeMore) => {
