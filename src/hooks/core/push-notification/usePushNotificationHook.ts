@@ -14,7 +14,11 @@ import useAppBadgeHook from '../../appBadge/useAppBadgeHook';
 import useChatUtilsHook from '../chat/useChatUtilsHook';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
 import useUserAuthHook from '../auth/useUserAuthHook';
+import AnalyticsEventTracking, {
+  BetterSocialEventTracking
+} from '../../../libraries/analytics/analyticsEventTracking';
 import TokenStorage, {ITokenEnum} from '../../../utils/storage/custom/tokenStorage';
+import {HomeTabsScreen, ScreenData} from '../onesignal/useOneSignalSubscribeToCommunityHooks';
 import {getAnonymousUserId, getUserId} from '../../../utils/users';
 import {getMessageDetail} from '../../../service/repo/messageRepo';
 
@@ -95,64 +99,80 @@ const usePushNotificationHook = () => {
       anonymousToken
     });
   };
+
   let isOpenNotification = false;
 
-  const helperNavigationResetWithData = (screenData) => {
+  const baseResetNavigation = (tabsScreenName: HomeTabsScreen, screen: ScreenData) => {
     setTimeout(() => {
-      if (!isOpenNotification) {
-        isOpenNotification = true;
-        const routes = [
-          {
-            name: 'AuthenticatedStack',
+      const routes = [
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            screen: 'HomeTabs',
             params: {
-              screen: 'HomeTabs',
-              params: {
-                screen: 'SignedChannelList'
-              }
+              screen: tabsScreenName
             }
           }
-        ];
-
-        if (screenData) {
-          routes.push({
-            name: 'AuthenticatedStack',
-            params: {
-              ...screenData
-            }
-          });
+        },
+        {
+          name: 'AuthenticatedStack',
+          params: {
+            ...screen
+          }
         }
+      ];
 
-        navigation.reset({
-          index: screenData ? 2 : 1,
-          routes
-        });
-      }
+      navigation.reset({
+        index: screen?.screen ? 2 : 1,
+        routes
+      });
     }, 500);
+  };
+
+  const helperNavigationResetWithData = (screenData) => {
+    if (!isOpenNotification) {
+      isOpenNotification = true;
+      baseResetNavigation('SignedChannelList', {
+        ...screenData
+      });
+    }
   };
 
   const __handleNotification = async (notification) => {
     if (notification?.data?.type === 'topic' && notification?.data?.topic_name) {
+      AnalyticsEventTracking.eventTrack(
+        `${BetterSocialEventTracking.BACKEND_PUSH_NOTIFICATIONS}topicPageScreen`
+      );
       navigation.navigate('TopicPageScreen', {
         id: notification?.data?.topic_name
       });
     }
 
     if (notification?.data?.type === 'feed' || notification?.data?.type === 'reaction') {
+      AnalyticsEventTracking.eventTrack(
+        `${BetterSocialEventTracking.BACKEND_PUSH_NOTIFICATIONS}postDetailPage`
+      );
       navigation.navigate('PostDetailPage', {
         feedId: notification.data.feed_id,
         is_from_pn: true
       });
     }
     if (notification?.data?.type === 'follow_user') {
+      AnalyticsEventTracking.eventTrack(
+        `${BetterSocialEventTracking.BACKEND_PUSH_NOTIFICATIONS}followedUser`
+      );
       navigation.navigate('OtherProfile', {
         data: {
-          user_id: notification?.data?.user_id,
+          user_id: signedProfileId,
           other_id: notification?.data?.user_id_follower,
           username: notification?.data?.username_follower
         }
       });
     }
     if (notification?.data?.type === 'message.new') {
+      AnalyticsEventTracking.eventTrack(
+        `${BetterSocialEventTracking.BACKEND_PUSH_NOTIFICATIONS}newMessage`
+      );
       if (notification?.userInteraction) {
         const isSameChannel = selectedChannel?.id === notification?.data?.channel_id;
         const isOnChatScreen = ['SignedChatScreen', 'AnonymousChatScreen'].includes(

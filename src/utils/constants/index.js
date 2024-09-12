@@ -82,6 +82,12 @@ const SETTINGS_PRIVACY_URL = 'https://home.helio.social/privacy';
 
 const CONTACT_SCREEN_MAX_SELECTED_USERS = 99;
 
+const ONESIGNAL_PN_TYPE = {
+  PDP: 'pdp',
+  TOPIC: 'topic',
+  PROFILE: 'profile'
+};
+
 const getPostType = (postTypeInNumber) => {
   switch (postTypeInNumber) {
     case POST_TYPE_LINK:
@@ -138,6 +144,7 @@ export {
   MESSAGE_TYPE_REPLY_PROMPT,
   MIN_POLLING_ALLOWED,
   NavigationConstants,
+  ONESIGNAL_PN_TYPE,
   PERMISSION_STATUS_NOT_DEFINED,
   PERMISSION_STATUS_ACCEPTED,
   PERMISSION_STATUS_BLOCKED,

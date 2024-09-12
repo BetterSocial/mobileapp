@@ -34,7 +34,7 @@ const useOtherProfileScreenHooks = (targetUserProfileId: string, username: strin
   const [, setOtherProfileUserId] = React.useState<string>('');
   const [other_id, setOtherId] = React.useState('');
   const [isCurrentFollowed, setIsCurrentFollowed] = React.useState(
-    getIsMeFollowingTargetStatus(params.data.other_id, params?.data?.username) ||
+    getIsMeFollowingTargetStatus(params?.data?.other_id, params?.data?.username) ||
       params?.data?.following
   );
 
