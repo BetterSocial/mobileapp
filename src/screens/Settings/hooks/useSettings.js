@@ -4,6 +4,7 @@ import messaging from '@react-native-firebase/messaging';
 import {Alert} from 'react-native';
 import {useSetRecoilState} from 'recoil';
 
+import AnalyticsEventTracking from '../../../libraries/analytics/analyticsEventTracking';
 import OneSignalUtil from '../../../service/onesignal';
 import StorageUtils from '../../../utils/storage';
 import StringConstant from '../../../utils/string/StringConstant';
@@ -39,6 +40,7 @@ const useSettings = () => {
 
       OneSignalUtil.removeExternalId();
       StorageUtils.clearAll();
+      AnalyticsEventTracking.resetId();
 
       removeAllCache();
       resetProfileFeed(myProfileDispatch);

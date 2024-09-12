@@ -17,6 +17,7 @@ import {useSetRecoilState} from 'recoil';
 
 import DevDummyLogin from '../../components/DevDummyLogin';
 import SlideShow from './elements/SlideShow';
+import StorageUtils from '../../utils/storage';
 import TokenStorage from '../../utils/storage/custom/tokenStorage';
 import getRemoteConfig from '../../service/getRemoteConfig';
 import useSignin from './hooks/useSignin';
@@ -106,9 +107,12 @@ const SignIn = () => {
         create(token);
         setUserId(response?.data?.appUserId);
         try {
-          const userId = await JwtDecode(token).user_id;
+          const profile = await JwtDecode(response.token);
+          const userId = profile?.user_id;
           const anonymousUserId = await JwtDecode(anonymousToken).user_id;
-          AnalyticsEventTracking.setId(userId);
+          StorageUtils.signedUserId.set(userId);
+          StorageUtils.anonymousUserId.set(anonymousUserId);
+          AnalyticsEventTracking.setId(profile);
           setAuth({
             anonProfileId: anonymousUserId,
             signedProfileId: userId,
