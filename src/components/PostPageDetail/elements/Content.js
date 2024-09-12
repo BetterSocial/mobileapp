@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   },
   containerImage: {
     flex: 1,
-    height: dimen.normalizeDimen(300)
+    height: dimen.size.FEED_CONTENT_HEIGHT
   },
   pollContainer: {
     paddingHorizontal: 12
