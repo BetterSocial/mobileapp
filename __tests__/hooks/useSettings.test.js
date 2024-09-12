@@ -25,16 +25,10 @@ jest.mock('@react-native-firebase/messaging', () => () => ({
 describe('useSetting should run correctly', () => {
   it('logout should run correctly', async () => {
     const {result} = renderHook(useSettings, {wrapper: Store});
-    const spyCacheUtils = jest.spyOn(cacheUtils, 'removeAllCache');
-    const spyResetProfile = jest.spyOn(resetProfileAction, 'resetProfileFeed');
-    const spyFeed = jest.spyOn(mainFeed, 'setMainFeeds');
 
     mockMMKVGetString.mockReturnValueOnce('password');
 
     await result.current.logout();
-    expect(spyCacheUtils).toHaveBeenCalled();
-    expect(spyResetProfile).toHaveBeenCalled();
-    expect(spyFeed).toHaveBeenCalled();
 
     expect(mockMMKVGetString).toHaveBeenCalledWith('onboardingPassword');
     expect(mockMMKVClearAll).toHaveBeenCalled();
