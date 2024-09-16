@@ -1,3 +1,4 @@
+import moment from 'moment';
 /* eslint-disable class-methods-use-this */
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
@@ -502,8 +503,11 @@ class ChannelList implements BaseDbSchema {
     members?: ChannelData['members'],
     anonUserInfo: AnonUserInfo | null = null
   ): ChannelList {
+    const sortedMessages = data?.messages?.sort(
+      (a, b) => moment(b.created_at).valueOf() - moment(a.created_at).valueOf()
+    );
     const isPM = channelType === 'PM';
-    const firstMessage = data?.messages[0] || data?.firstMessage;
+    const firstMessage = data?.firstMessage || sortedMessages?.[0];
     const isSystemMessage = firstMessage?.type === 'system' || firstMessage?.isSystem;
     const isMe = firstMessage?.user?.id === data?.myUserId;
     let descriptionSystemMessage;
