@@ -9,18 +9,8 @@ import {ENABLE_SEGMENT, MIXPANEL_TOKEN, SEGMENT_WRITE_KEY} from '../Configs/ENVC
 let MIXPANEL_INSTANCE: Mixpanel | null = null;
 let SEGMENT_INSTANCE: SegmentClient | null = null;
 
-function getAnalyticsInstance(userId?: string) {
-  SEGMENT_INSTANCE = createClient({
-    writeKey: SEGMENT_WRITE_KEY || '',
-    debug: __DEV__,
-    trackAppLifecycleEvents: true,
-    trackDeepLinks: true
-  });
-
-  const trackAutomaticEvents = false;
-  MIXPANEL_INSTANCE = new Mixpanel(MIXPANEL_TOKEN || '', trackAutomaticEvents);
-  MIXPANEL_INSTANCE.init();
-
+function setClientIdentity(userId?: string) {
+  if (!userId) return;
   let profile: {username: string; id: string} | null = null;
 
   try {
@@ -32,18 +22,43 @@ function getAnalyticsInstance(userId?: string) {
 
   try {
     if (userId) {
-      SEGMENT_INSTANCE.userInfo.set({
-        anonymousId: userId,
-        userId,
-        traits: {name: profile?.username, id: userId}
-      });
+      if (SEGMENT_INSTANCE) {
+        SEGMENT_INSTANCE.userInfo.set({
+          anonymousId: userId,
+          userId,
+          traits: {name: profile?.username, id: userId}
+        });
+      }
 
-      MIXPANEL_INSTANCE.identify(userId);
-      MIXPANEL_INSTANCE.getPeople().set('$name', profile?.username);
+      if (MIXPANEL_INSTANCE) {
+        MIXPANEL_INSTANCE.identify(userId);
+        MIXPANEL_INSTANCE.getPeople().set('$name', profile?.username);
+      }
     }
   } catch (e) {
     console.log('Error getting signed user id', e);
   }
+}
+
+function getAnalyticsInstance(userId?: string) {
+  if (MIXPANEL_INSTANCE && SEGMENT_INSTANCE)
+    return {
+      segmentClient: SEGMENT_INSTANCE,
+      mixpanel: MIXPANEL_INSTANCE
+    };
+
+  SEGMENT_INSTANCE = createClient({
+    writeKey: SEGMENT_WRITE_KEY || '',
+    debug: __DEV__,
+    trackAppLifecycleEvents: true,
+    trackDeepLinks: true
+  });
+
+  const trackAutomaticEvents = false;
+  MIXPANEL_INSTANCE = new Mixpanel(MIXPANEL_TOKEN || '', trackAutomaticEvents);
+  MIXPANEL_INSTANCE.init();
+
+  setClientIdentity(userId);
 
   return {
     segmentClient: SEGMENT_INSTANCE,
@@ -623,9 +638,7 @@ const AnalyticsEventTracking = (() => {
     },
 
     setId: (profile: AnalyticsProfile) => {
-      MIXPANEL_INSTANCE = null;
-      SEGMENT_INSTANCE = null;
-      getAnalyticsInstance(profile?.id);
+      setClientIdentity(profile?.id);
     },
 
     resetId: () => {
@@ -636,9 +649,6 @@ const AnalyticsEventTracking = (() => {
       client.identify(undefined);
       client.reset(true);
       StorageUtils.signedUserId.clear();
-
-      MIXPANEL_INSTANCE = null;
-      SEGMENT_INSTANCE = null;
     }
   };
 })();
