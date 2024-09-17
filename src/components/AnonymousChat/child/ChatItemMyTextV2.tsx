@@ -164,7 +164,7 @@ const ChatItemMyTextV2 = ({
 
   return (
     <View style={[styles.chatContainer, isContinuous ? {marginTop: dimen.normalizeDimen(-4)} : {}]}>
-      <ChatContextMenuView contextMenuType="MyChatContextMenu" chat={chatItem}>
+      <ChatContextMenuView contextMenuType="MyChatContextMenu" chat={chatItem} type={chatType}>
         <View style={handleTextContainerStyle()}>
           {!isContinuous && (
             <View

@@ -1,4 +1,5 @@
 import ChatSchema from '../../../src/database/schema/ChatSchema';
+import {Anonimity} from './BaseChannelItem.types';
 import {ChatStatus} from '../../database/schema/ChannelList.types';
 
 /* eslint-disable no-shadow */
@@ -24,7 +25,7 @@ export interface BaseChatItemProps {
 
 export interface ChatItemMyTextProps extends BaseChatItemProps {
   status?: ChatStatus;
-  chatType?: string;
+  chatType: Anonimity;
 }
 
 export interface ChatItemTargetText extends BaseChatItemProps {
@@ -34,7 +35,7 @@ export interface ChatItemTargetText extends BaseChatItemProps {
 export interface BaseChatItemComponentProps {
   item?: ChatSchema;
   index?: number;
-  type?: 'ANONYMOUS' | 'SIGNED';
+  type: Anonimity;
   messageSingle?: string;
   componentType?: 'SINGLE' | 'GROUP';
 }

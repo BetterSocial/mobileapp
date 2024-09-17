@@ -5,8 +5,9 @@ import ChatSchema from '../../../database/schema/ChatSchema';
 import ShareUtils from '../../../utils/share';
 import SignedMessageRepo from '../../../service/repo/signedMessageRepo';
 import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import {Anonimity} from '../../../../types/component/AnonymousChat/BaseChannelItem.types';
 
-const useMessageHook = (message: ChatSchema | undefined) => {
+const useMessageHook = (message: ChatSchema | undefined, anonimity: Anonimity) => {
   const {localDb, refreshWithId} = useLocalDatabaseHook();
 
   const copyMessage = () => {
@@ -26,7 +27,7 @@ const useMessageHook = (message: ChatSchema | undefined) => {
       await ChatSchema.updateDeletedChatType(localDb, message?.id, message);
       refreshWithId('chat', message?.channelId);
 
-      if (message?.type === 'ANONYMOUS') {
+      if (anonimity === 'ANONYMOUS') {
         await AnonymousMessageRepo.deleteMessage(message?.id);
       } else {
         await SignedMessageRepo.deleteMessage(message?.id);
