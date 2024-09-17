@@ -54,6 +54,7 @@ const WhotoFollow = () => {
   const [topics] = React.useContext(Context).topics;
   const [localCommunity] = React.useContext(Context).localCommunity;
   const [usersState, usersDispatch] = React.useContext(Context).users;
+  const [isUserRegistered, setIsUserRegistered] = React.useState(false);
 
   const setInitialValue = useSetRecoilState(InitialStartupAtom);
   const create = useClientGetstream();
@@ -172,6 +173,9 @@ const WhotoFollow = () => {
   };
 
   const register = async () => {
+    if (isUserRegistered) {
+      return;
+    }
     setFetchRegister(true);
     Analytics.logEvent('onb_select_follows_btn_add', {
       onb_whofollow_users_selected: followed
@@ -245,11 +249,12 @@ const WhotoFollow = () => {
             backgroundColor: COLORS.signed_primary,
             style: top > 55 ? {paddingTop: 50} : undefined
           });
+          setIsUserRegistered(true);
           setTimeout(() => {
             create();
             setImage(null, usersDispatch);
             setInitialValue({id: res.token});
-          }, 2000);
+          }, 500);
         } else {
           crashlytics().recordError(new Error(res));
           AnalyticsEventTracking.eventTrack(
