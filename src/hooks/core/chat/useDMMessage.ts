@@ -1,13 +1,14 @@
 import {v4 as uuid} from 'uuid';
-import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
-import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
+
 import ChannelList from '../../../database/schema/ChannelListSchema';
+import ChannelListMemberSchema from '../../../database/schema/ChannelListMemberSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
 import UserSchema from '../../../database/schema/UserSchema';
-import {initChatFromPost, initChatFromPostAnon} from '../../../service/chat';
-import {getChannelListInfo} from '../../../utils/string/StringUtils';
-import useUserAuthHook from '../auth/useUserAuthHook';
 import useChatUtilsHook from './useChatUtilsHook';
+import useLocalDatabaseHook from '../../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../auth/useUserAuthHook';
+import {getChannelListInfo} from '../../../utils/string/StringUtils';
+import {initChatFromPost, initChatFromPostAnon} from '../../../service/chat';
 
 type ChannelCategory = 'SIGNED' | 'ANONYMOUS';
 
@@ -51,7 +52,9 @@ const useDMMessage = () => {
         image: channelImage
       };
 
-      channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
+      if (channel?.messages?.length > 0) {
+        channel.firstMessage = channel?.messages?.[channel?.messages?.length - 1];
+      }
       channel.myUserId = signedProfileId; // change to use getChannelListInfo
       channel.targetName = chatName?.name; // change to use getChannelListInfo
       channel.targetImage = chatName?.image; // change to use getChannelListInfo
@@ -120,7 +123,7 @@ const useDMMessage = () => {
       await Promise.all(
         (channel?.messages || []).map(async (message) => {
           if (message?.type === 'deleted') return;
-          const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message);
+          const chat = ChatSchema.fromGetAllChannelAPI(channel?.id, message?.message);
           await chat.save(localDb);
         })
       );

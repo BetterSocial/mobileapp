@@ -233,7 +233,9 @@ const RenderListFeed = (props) => {
           onPressDownVote={onPressDownVoteHandle}
           onPressUpvote={onPressUpvoteHandle}
           eventTrackCallback={{
-            pressDMFooter: onPressDmAdditionalProcess
+            pressDMFooter: onPressDmAdditionalProcess,
+            pressSignedDM: () => {},
+            pressAnonDM: () => {}
           }}
           statusVote={voteStatus}
           loadingVote={loadingVote}

@@ -109,7 +109,10 @@ const useSystemMessage = () => {
     return false;
   }
 
-  function getFirstMessage(messages: GetstreamMessage[]): GetstreamMessage | null | undefined {
+  function getFirstMessage(
+    messages: GetstreamMessage[],
+    withLog = false
+  ): GetstreamMessage | null | undefined {
     if (!messages) return null;
     if (messages?.length === 0) return null;
     const sortedMessages = [...messages]?.sort((a, b) =>
@@ -120,16 +123,19 @@ const useSystemMessage = () => {
     while (sortedMessages?.length > 0) {
       const checkFirstMessage = sortedMessages[0];
       if (!__isSystemMessage(checkFirstMessage)) {
+        if (withLog) console.log('checkpoint1', checkFirstMessage);
         firstMessage = checkFirstMessage;
         break;
       }
 
       if (checkFirstMessage?.text?.toLocaleLowerCase()?.includes('this topic has new')) {
+        if (withLog) console.log('checkpoint2');
         sortedMessages?.shift();
         continue;
       }
 
       if (checkFirstMessage?.text?.toLocaleLowerCase()?.includes('you joined this community')) {
+        if (withLog) console.log('checkpoint3');
         if (isMe(checkFirstMessage?.system_user)) {
           firstMessage = checkFirstMessage;
           break;
@@ -143,6 +149,7 @@ const useSystemMessage = () => {
         __isMessageOnlyForSystemUser(sortedMessages[0]) &&
         __isMySystemMessage(sortedMessages[0])
       ) {
+        if (withLog) console.log('checkpoint4');
         firstMessage = checkSystemMessageOnlyForSystemUser(sortedMessages[0]);
         break;
       }
@@ -156,16 +163,19 @@ const useSystemMessage = () => {
       }
 
       if (__isMessageForOtherUser(sortedMessages[0])) {
+        if (withLog) console.log('checkpoint5');
         firstMessage = checkSystemMessageOnlyForOtherSystemUser(sortedMessages[0]);
         break;
       }
 
       if (__isSystemMessage(sortedMessages[0])) {
+        if (withLog) console.log('checkpoint6');
         firstMessage = checkSystemMessage(sortedMessages[0]);
         break;
       }
 
       if (checkFirstMessage?.text?.toLocaleLowerCase()?.includes('started following')) {
+        if (withLog) console.log('checkpoint7');
         firstMessage = checkFirstMessage;
         break;
       }

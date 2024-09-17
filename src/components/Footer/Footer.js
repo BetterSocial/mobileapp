@@ -97,7 +97,7 @@ const Footer = ({
   const onPressDM = async () => {
     try {
       setLoading({...loading, loadingDm: true});
-      eventTrackCallback.pressSignedDM();
+      eventTrackCallback?.pressSignedDM?.();
       if (!item?.anon_user_info_emoji_name) {
         const channelName = username;
         const selectedUser = {
@@ -111,6 +111,7 @@ const Footer = ({
       } else {
         await sendMessageDM(item.id, 'post', 'SIGNED');
       }
+      refSheet.current.close();
     } catch (e) {
       console.warn(e);
     } finally {
@@ -122,8 +123,9 @@ const Footer = ({
   const onPressDMAnon = async () => {
     try {
       setLoading({...loading, loadingDmAnon: true});
-      eventTrackCallback.pressAnonDM();
+      eventTrackCallback?.pressAnonDM?.();
       await sendMessageDM(item.id, 'post', 'ANONYMOUS');
+      refSheet.current.close();
     } catch (e) {
       console.warn(e);
     } finally {
@@ -169,7 +171,7 @@ const Footer = ({
     try {
       refSheet.current.open();
       setLoading({...loading, loadingGetAllowAnonDmStatus: true});
-      eventTrackCallback.pressDMFooter();
+      eventTrackCallback?.pressDMFooter?.();
       const data = await getAllowAnonDmStatus('post', item.id);
       setUserAllowDm(data?.user.allow_anon_dm);
     } catch (e) {
