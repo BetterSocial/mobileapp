@@ -110,6 +110,7 @@ const BaseChatItem = ({item, index, type}: BaseChatItemComponentProps) => {
       username={handleUserName(item, selectedChannel)}
       type={BaseChatItemTypeProps.ANON_CHAT}
       chatItem={item}
+      chatType={type}
     />
   );
 };

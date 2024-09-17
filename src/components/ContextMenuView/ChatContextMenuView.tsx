@@ -8,6 +8,7 @@ import {Alert, NativeSyntheticEvent} from 'react-native';
 import ChatSchema from '../../database/schema/ChatSchema';
 import ShareUtils from '../../utils/share';
 import useMessageHook from '../../hooks/core/chat/useMessageHook';
+import {Anonimity} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
 import {COLORS} from '../../utils/theme';
 
 type BetterSocialContextMenuType = 'MyChatContextMenu' | 'TargetChatContextMenu';
@@ -21,6 +22,7 @@ type ChatContextMenuViewProps = {
   children: React.ReactNode;
   contextMenuType: BetterSocialContextMenuType;
   chat?: ChatSchema;
+  type: Anonimity;
 };
 
 const MyChatContextMenu: BetterSocialContextMenuAction[] = [
@@ -34,8 +36,8 @@ const TargetChatContextMenu: BetterSocialContextMenuAction[] = [
   {title: 'Copy', systemIcon: 'square.on.square'}
 ];
 
-const ChatContextMenuView = ({children, contextMenuType, chat}: ChatContextMenuViewProps) => {
-  const {copyMessage, deleteMessage} = useMessageHook(chat);
+const ChatContextMenuView = ({children, contextMenuType, chat, type}: ChatContextMenuViewProps) => {
+  const {copyMessage, deleteMessage} = useMessageHook(chat, type);
 
   let contextMenuActions = MyChatContextMenu;
   if (contextMenuType === 'TargetChatContextMenu') {
