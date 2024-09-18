@@ -53,7 +53,6 @@ const useOneSignalSubscribeToCommunityHooks = () => {
   const loginToOneSignal = async () => {
     featLog('login to one signal', token, signedProfileId);
     try {
-      OneSignalUtil.setExternalId(signedProfileId);
       await OneSignalUtil.rebuildAndSubscribeTags();
     } catch (e) {
       console.log('error one signal login ');
