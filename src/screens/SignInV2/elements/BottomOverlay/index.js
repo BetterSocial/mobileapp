@@ -1,18 +1,18 @@
 import * as React from 'react';
-import {Platform, Pressable, StyleSheet, Text, View, Image} from 'react-native';
+import PropTypes from 'prop-types';
+import {Image, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-import PropTypes from 'prop-types';
 import BottomOverlayPagination from './pagination';
 import MemoizedIcArrowRightTail from '../../../../assets/arrow/ic_arrow_right_tail';
 import StringConstant from '../../../../utils/string/StringConstant';
 import dimen from '../../../../utils/dimen';
 import {COLORS} from '../../../../utils/theme';
 import {fonts, normalize, normalizeFontSize} from '../../../../utils/fonts';
-import {openUrl} from '../../../../utils/Utils';
 import {imageConst} from '../../../../components/Image';
+import {openUrl} from '../../../../utils/Utils';
 
-const HUMAN_ID_URL = 'https://www.human-internet.org';
+const HUMAN_ID_URL = 'https://human-id.org';
 
 const BottomOverlay = ({count, handleLogin, index, isLogin, title, onNextSlide, text}) => {
   const goToHumanIdWeb = () => {
