@@ -53,6 +53,9 @@ const useOneSignalSubscribeToCommunityHooks = () => {
   const loginToOneSignal = async () => {
     featLog('login to one signal', token, signedProfileId);
     try {
+      const oneSignalExternalId = await OneSignal.User.getExternalId();
+      if (!oneSignalExternalId) return;
+
       await OneSignalUtil.rebuildAndSubscribeTags();
     } catch (e) {
       console.log('error one signal login ');
@@ -90,8 +93,7 @@ const useOneSignalSubscribeToCommunityHooks = () => {
         baseResetNavigation('Feed', {
           screen: 'PostDetailPage',
           params: {
-            feedId: additionalData?.feed_id,
-            is_from_pn: true
+            feedId: additionalData?.feed_id
           }
         });
 

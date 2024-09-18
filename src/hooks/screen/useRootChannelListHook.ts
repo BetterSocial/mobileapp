@@ -59,8 +59,13 @@ const useRootChannelListHook = () => {
       };
       fcmTokenService(payload);
       OneSignal.User.pushSubscription.optIn();
-      OneSignalUtil.rebuildAndSubscribeTags();
-      if (signedProfileId) OneSignalUtil.setExternalId(signedProfileId);
+      if (signedProfileId) {
+        const externalId = await OneSignalUtil.setExternalId(signedProfileId);
+        if (externalId)
+          setTimeout(() => {
+            OneSignalUtil.rebuildAndSubscribeTags();
+          }, 1000);
+      }
     }
   };
 

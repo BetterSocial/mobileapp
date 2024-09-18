@@ -53,11 +53,11 @@ const removeAllSubscribedTags = async () => {
   }
 };
 
-const setExternalId = (userId: string) => {
+const setExternalId = async (userId: string) => {
   featLog('set external id', userId);
-  OneSignal.User.getExternalId().then((externalId) => {
-    if (externalId !== userId) setTimeout(() => OneSignal.login(userId), 1000);
-  });
+  OneSignal.login(userId);
+  const externalId = await OneSignal.User.getExternalId();
+  return externalId;
 };
 
 const removeExternalId = () => {
