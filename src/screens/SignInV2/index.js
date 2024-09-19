@@ -105,11 +105,11 @@ const SignIn = () => {
           deeplinkProfile: false
         });
         create(token);
-        setUserId(response?.data?.appUserId);
         try {
-          const profile = await JwtDecode(response.token);
+          const profile = await JwtDecode(token);
           const userId = profile?.user_id;
           const anonymousUserId = await JwtDecode(anonymousToken).user_id;
+          setUserId(userId);
           StorageUtils.signedUserId.set(userId);
           StorageUtils.anonymousUserId.set(anonymousUserId);
           AnalyticsEventTracking.setId(profile);
