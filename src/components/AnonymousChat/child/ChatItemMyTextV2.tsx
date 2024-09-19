@@ -4,7 +4,6 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import ChatContextMenuView from '../../ContextMenuView/ChatContextMenuView';
 import ChatItemAttachment from './ChatItemAttachment';
-import IconChatCheckMark from '../../../assets/icon/IconChatCheckMark';
 import IconChatClockGrey from '../../../assets/icon/IconChatClockGrey';
 import MemoLinkDetectionText from '../../Text/LinkDetectionText';
 import dimen from '../../../utils/dimen';
@@ -135,11 +134,7 @@ const ChatItemMyTextV2 = ({
         </View>
       );
 
-    return (
-      <View style={styles.icon}>
-        <IconChatCheckMark />
-      </View>
-    );
+    return <></>;
   }, []);
 
   const renderAvatar = React.useCallback(() => {
