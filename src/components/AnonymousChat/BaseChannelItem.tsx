@@ -41,7 +41,8 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
   showFollowingButton = false,
   dbAnonUserInfo = null,
   hasAttachment = false,
-  postNotificationIsMediaOnly = false
+  postNotificationIsMediaOnly = false,
+  containerBackgroundColor
 }) => {
   const isAnonymousTab: boolean =
     channelType === 'ANON_PM' ||
@@ -50,7 +51,7 @@ const BaseChannelItem: (props: BaseChannelItemProps) => React.ReactElement = ({
 
   return (
     <CustomPressable onPress={onPress}>
-      <View style={styles.chatContainer}>
+      <View style={[styles.chatContainer, {backgroundColor: containerBackgroundColor}]}>
         <ChannelImage
           type={type}
           mainPicture={picture}

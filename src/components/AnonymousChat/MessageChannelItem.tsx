@@ -7,6 +7,7 @@ import useChatUtilsHook from '../../hooks/core/chat/useChatUtilsHook';
 import useFollowUserV2Hook from '../../hooks/core/users/useFollowUserV2Hook';
 import useUserAuthHook from '../../hooks/core/auth/useUserAuthHook';
 import {BaseChannelItemTypeProps} from '../../../types/component/AnonymousChat/BaseChannelItem.types';
+import {COLORS} from '../../utils/theme';
 import {ChannelList} from '../../../types/database/schema/ChannelList.types';
 import {MessageChannelItemProps} from '../../../types/component/AnonymousChat/MessageChannelItem.types';
 import {calculateTime} from '../../utils/time';
@@ -77,6 +78,9 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       channelType={item?.channelType}
       dbAnonUserInfo={dbAnonUserInfo}
       hasAttachment={item?.rawJson?.message?.attachments?.length > 0}
+      containerBackgroundColor={
+        item?.channelType === 'PM' ? COLORS.signed_secondary : COLORS.anon_secondary
+      }
     />
   );
 };

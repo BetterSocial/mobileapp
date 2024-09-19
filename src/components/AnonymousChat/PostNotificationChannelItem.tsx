@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import BaseChannelItem from './BaseChannelItem';
 import useChannelHook from '../../hooks/screen/useChannelHook';
+import {COLORS} from '../../utils/theme';
 import {
   Comment,
   PostNotificationChannelList,
@@ -118,6 +119,7 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
         anon_user_info_emoji_name: item?.anon_user_info_emoji_name
       }}
       postNotificationIsMediaOnly={item?.rawJson?.isMediaOnlyMessage}
+      containerBackgroundColor={COLORS.gray210}
     />
   );
 };

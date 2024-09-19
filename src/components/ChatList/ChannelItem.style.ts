@@ -18,5 +18,8 @@ export const channelItemStyles = StyleSheet.create({
     paddingEnd: dimen.normalizeDimen(20),
     borderBottomColor: COLORS.gray210,
     borderBottomWidth: 1
+  },
+  groupChannelContainer: {
+    backgroundColor: COLORS.signed_secondary
   }
 });
