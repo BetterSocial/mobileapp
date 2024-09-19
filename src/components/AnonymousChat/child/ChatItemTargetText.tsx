@@ -91,7 +91,8 @@ const ChatItemTargetText = ({
   message = '',
   attachments = [],
   avatar,
-  chatItem
+  chatItem,
+  chatType
 }: ChatItemMyTextProps) => {
   const renderAvatar = React.useCallback(() => {
     if (isContinuous) return <View style={styles.avatar} />;
@@ -118,7 +119,7 @@ const ChatItemTargetText = ({
   return (
     <View style={[styles.chatContainer, isContinuous ? {marginTop: dimen.normalizeDimen(-4)} : {}]}>
       {renderAvatar()}
-      <ChatContextMenuView contextMenuType="TargetChatContextMenu" chat={chatItem}>
+      <ChatContextMenuView contextMenuType="TargetChatContextMenu" chat={chatItem} type={chatType}>
         <View style={handleTextContainerStyle()}>
           {!isContinuous && (
             <View

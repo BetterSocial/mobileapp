@@ -1,5 +1,7 @@
 import {AnonUserInfo} from '../../service/AnonProfile.type';
 
+export type Anonimity = 'ANONYMOUS' | 'SIGNED';
+
 /* eslint-disable no-shadow */
 export enum BaseChannelItemTypeProps {
   SIGNED_PM = 'SIGNED_PM',
