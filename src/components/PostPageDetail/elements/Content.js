@@ -252,7 +252,7 @@ const Content = ({
             })}
           </View>
         ) : (
-          <View style={styles.containerImage}>
+          <View style={images_url?.length > 0 ? styles.containerImage : {}}>
             <ImageLayouter
               mode={FastImage.resizeMode.cover}
               images={images_url || []}
