@@ -79,7 +79,7 @@ const MessageChannelItem: (props: MessageChannelItemProps) => React.ReactElement
       dbAnonUserInfo={dbAnonUserInfo}
       hasAttachment={item?.rawJson?.message?.attachments?.length > 0}
       containerBackgroundColor={
-        item?.channelType === 'PM' ? COLORS.signed_secondary : COLORS.anon_secondary
+        item?.channelType === 'PM' ? COLORS.signedPmGroupChannel : COLORS.anonPmGroupChannel
       }
     />
   );

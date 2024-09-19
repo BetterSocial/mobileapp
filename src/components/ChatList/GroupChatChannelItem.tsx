@@ -60,7 +60,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
 
   return (
     <CustomPressable onPress={onChannelPressed}>
-      <View style={[styles.channelContainer, {backgroundColor: COLORS.signed_secondary}]}>
+      <View style={[styles.channelContainer, {backgroundColor: COLORS.signedPmGroupChannel}]}>
         <ChannelImage>
           <ChannelImage.Big type={channelType} image={channelPicture} />
           <ChannelImage.Small type={channelType} />

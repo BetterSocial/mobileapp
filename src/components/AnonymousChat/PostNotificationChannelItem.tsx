@@ -119,7 +119,11 @@ const PostNotificationChannelItem: (props: MessageChannelItemProps) => React.Rea
         anon_user_info_emoji_name: item?.anon_user_info_emoji_name
       }}
       postNotificationIsMediaOnly={item?.rawJson?.isMediaOnlyMessage}
-      containerBackgroundColor={COLORS.gray210}
+      containerBackgroundColor={
+        item?.channelType === 'POST_NOTIFICATION'
+          ? COLORS.signedPostNotificationChannel
+          : COLORS.anonPostNotificationChannel
+      }
     />
   );
 };
