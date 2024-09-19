@@ -2,11 +2,14 @@ import * as React from 'react';
 import PushNotification from 'react-native-push-notification';
 import messaging from '@react-native-firebase/messaging';
 import {Alert, PushNotificationPermissions} from 'react-native';
+import {OneSignal} from 'react-native-onesignal';
 import {openSettings} from 'react-native-permissions';
 
 import ChannelList from '../../database/schema/ChannelListSchema';
+import OneSignalUtil from '../../service/onesignal';
 import StorageUtils from '../../utils/storage';
 import useLocalDatabaseHook from '../../database/hooks/useLocalDatabaseHook';
+import useUserAuthHook from '../core/auth/useUserAuthHook';
 import {
   PERMISSION_STATUS_ACCEPTED,
   PERMISSION_STATUS_BLOCKED,
@@ -20,6 +23,8 @@ const useRootChannelListHook = () => {
   const [signedChannelUnreadCount, setSignedChannelUnreadCount] = React.useState(0);
   const [anonymousChannelUnreadCount, setAnonymousChannelUnreadCount] = React.useState(0);
   const [totalUnreadCount, setTotalUnreadCount] = React.useState(0);
+
+  const {signedProfileId} = useUserAuthHook();
 
   const getSignedChannelUnreadCount = async () => {
     if (!localDb) return;
@@ -53,6 +58,14 @@ const useRootChannelListHook = () => {
         fcm_token: fcmToken
       };
       fcmTokenService(payload);
+      OneSignal.User.pushSubscription.optIn();
+      if (signedProfileId) {
+        const externalId = await OneSignalUtil.setExternalId(signedProfileId);
+        if (externalId)
+          setTimeout(() => {
+            OneSignalUtil.rebuildAndSubscribeTags();
+          }, 1000);
+      }
     }
   };
 
