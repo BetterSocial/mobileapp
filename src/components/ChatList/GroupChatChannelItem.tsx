@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import {Text, View} from 'react-native';
+import {StyleProp, Text, View, ViewStyle} from 'react-native';
 
 import ChannelContent from './elements/ChannelContent';
 import ChannelImage from './elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import useProfileHook from '../../hooks/core/profile/useProfileHook';
+import {COLORS} from '../../utils/theme';
 import {ChannelItemProps} from '../../../types/component/ChatList/ChannelItem.types';
 import {DELETED_MESSAGE_TEXT} from '../../utils/constants';
 import {calculateTime} from '../../utils/time';
@@ -59,7 +60,7 @@ const GroupChatChannelItem = (props: ChannelItemProps) => {
 
   return (
     <CustomPressable onPress={onChannelPressed}>
-      <View style={styles.channelContainer}>
+      <View style={[styles.channelContainer, {backgroundColor: COLORS.signedPmGroupChannel}]}>
         <ChannelImage>
           <ChannelImage.Big type={channelType} image={channelPicture} />
           <ChannelImage.Small type={channelType} />

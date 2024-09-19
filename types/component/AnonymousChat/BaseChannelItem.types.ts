@@ -55,4 +55,5 @@ export interface BaseChannelItemProps {
   channelType?: string;
   hasAttachment?: boolean;
   postNotificationIsMediaOnly?: boolean;
+  containerBackgroundColor?: string;
 }

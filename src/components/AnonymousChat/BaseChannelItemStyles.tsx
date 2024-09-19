@@ -23,6 +23,12 @@ const BaseChatItemStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  signedChatChannelContainer: {
+    backgroundColor: COLORS.signed_secondary
+  },
+  signedPostNotificationChannelContainer: {
+    backgroundColor: COLORS.gray210
   }
 });
 
