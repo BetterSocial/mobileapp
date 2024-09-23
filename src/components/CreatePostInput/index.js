@@ -186,6 +186,8 @@ const CreatePostInput = ({
         }
         placeholderTextColor={COLORS.gray410}
         autoCapitalize={'sentences'}
+        autoComplete="off"
+        autoCorrect={false}
         keyboardAppearance="dark">
         <Text>{formattedText}</Text>
       </TextInput>
