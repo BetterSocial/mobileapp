@@ -173,6 +173,7 @@ const usePushNotificationHook = () => {
       AnalyticsEventTracking.eventTrack(
         `${BetterSocialEventTracking.BACKEND_PUSH_NOTIFICATIONS}newMessage`
       );
+
       if (notification?.userInteraction) {
         const isSameChannel = selectedChannel?.id === notification?.data?.channel_id;
         const isOnChatScreen = ['SignedChatScreen', 'AnonymousChatScreen'].includes(
@@ -184,10 +185,25 @@ const usePushNotificationHook = () => {
             id: notification?.data?.channel_id,
             channelType: 'PM'
           });
+
           return fetchChannelDetail(channel);
         }
 
-        const channel = await ChannelList.getSchemaById(localDb, notification?.data?.channel_id);
+        let channel = await ChannelList.getSchemaById(localDb, notification?.data?.channel_id);
+        if (!channel) {
+          try {
+            setIsLoadingFetchingChannelDetail(true);
+            const fetchChannel = new ChannelList({
+              id: notification?.data?.channel_id,
+              channelType: 'PM'
+            });
+            await fetchChannelDetail(fetchChannel);
+            channel = await ChannelList.getSchemaById(localDb, notification?.data?.channel_id);
+          } finally {
+            setIsLoadingFetchingChannelDetail(false);
+          }
+        }
+
         setSelectedChannel(channel);
         if (notification?.data?.is_annoymous === 'false') {
           helperNavigationResetWithData({
