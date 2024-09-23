@@ -6,6 +6,7 @@ import ChannelContent from './elements/ChannelContent';
 import ChannelImage from './elements/ChannelImage';
 import CustomPressable from '../CustomPressable';
 import useTopicChannelItemHook from './hook/useTopicChannelItemHook';
+import {COLORS} from '../../utils/theme';
 import {TopicChannelItemProps} from '../../../types/component/ChatList/ChannelItem.types';
 import {calculateTime} from '../../utils/time';
 import {channelItemStyles as styles} from './ChannelItem.style';
@@ -28,9 +29,12 @@ const CommunityChannelItem = (props: TopicChannelItemProps) => {
     }
   };
 
+  const backgroundColor =
+    channelType() === 'ANON_TOPIC' ? COLORS.anonTopicChannel : COLORS.signedTopicChannel;
+
   return (
     <CustomPressable onPress={onChannelPressed}>
-      <View style={styles.channelContainer}>
+      <View style={[styles.channelContainer, {backgroundColor}]}>
         <ChannelImage>
           <ChannelImage.Big type={channelType()} image={channelPicture} />
           <ChannelImage.Small type={channelType()} />

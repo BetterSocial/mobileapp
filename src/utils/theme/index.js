@@ -28,6 +28,14 @@ export const COLORS = {
   whiteSmoke: '#F4F4F4',
   bluePrimary: '#4782D7',
 
+  anonPmGroupChannel: '#11333B',
+  anonTopicChannel: '#184A57',
+  anonPostNotificationChannel: '#17272B',
+
+  signedPmGroupChannel: '#112A3D',
+  signedTopicChannel: '#1D3E5E',
+  signedPostNotificationChannel: '#16202A',
+
   // need to remove
   holytosca: '#00ADB5',
   lightBlue: '#2F80ED',
