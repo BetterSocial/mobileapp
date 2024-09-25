@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Accordion from 'react-native-collapsible/Accordion';
 import PropTypes from 'prop-types';
-import {FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Keyboard, RefreshControl, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/native';
 
@@ -13,13 +13,14 @@ import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import MemoDomainProfilePictureEmptyState from '../../../assets/icon/DomainProfilePictureEmptyState';
 import RecentSearch from '../elements/RecentSearch';
 import dimen from '../../../utils/dimen';
+import useDiscovery from '../hooks/useDiscovery';
 import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
 import {Context} from '../../../context/Store';
+import {addIFollowByID, setIFollow} from '../../../context/actions/news';
 import {followDomain, unfollowDomain} from '../../../service/domain';
 import {fonts} from '../../../utils/fonts';
-import {addIFollowByID, setIFollow} from '../../../context/actions/news';
 
 const FROM_FOLLOWED_DOMAIN = 'fromfolloweddomains';
 const FROM_FOLLOWED_DOMAIN_INITIAL = 'fromfolloweddomainsinitial';
@@ -81,6 +82,7 @@ const DomainFragment = ({
   setSearchText,
   setIsFirstTimeOpen,
   fetchData = () => {},
+  fetchSpecificData = () => {},
   searchText,
   withoutRecent = false
 }) => {
@@ -96,6 +98,8 @@ const DomainFragment = ({
     common: {onCommonClearRecentSearch, onCommonRecentItemClicked},
     domain: {onDomainPageOpened, onDomainPageFollowButtonClicked, onDomainPageUnfollowButtonClicked}
   } = useDiscoveryScreenAnalyticsHook();
+
+  const {isRefreshControlShown, setIsRefreshControlShown} = useDiscovery();
 
   const isReady = useIsReady();
 
@@ -248,6 +252,12 @@ const DomainFragment = ({
     if (searchText.length > 0) fetchData();
   };
 
+  const onFlatListRefreshed = async () => {
+    setIsRefreshControlShown(true);
+    await fetchSpecificData();
+    setIsRefreshControlShown(false);
+  };
+
   const renderDefaultImage = () => {
     return (
       <MemoDomainProfilePictureEmptyState
@@ -365,6 +375,13 @@ const DomainFragment = ({
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.6}
         keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshControlShown}
+            onRefresh={onFlatListRefreshed}
+            tintColor={COLORS.white}
+          />
+        }
       />
     );
   };

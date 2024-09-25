@@ -82,7 +82,7 @@ const DiscoveryScreenV2 = ({route}) => {
     return unsubscribe;
   }, []);
 
-  const fetchDiscoveryData = async (text) => {
+  const fetchDiscoveryDataUserOnly = async (text) => {
     const fetchDiscoveryInitialUsers = async () => {
       const initialData = await DiscoveryRepo.fetchInitialDiscoveryUsers(
         50,
@@ -128,6 +128,14 @@ const DiscoveryScreenV2 = ({route}) => {
       }
     };
 
+    if (text === undefined) {
+      await fetchDiscoveryInitialUsers();
+    } else {
+      await fetchDiscoveryDataUser();
+    }
+  };
+
+  const fetchDiscoveryDataDomainOnly = async (text) => {
     const fetchDiscoveryInitialDomains = async () => {
       const initialData = await DiscoveryRepo.fetchInitialDiscoveryDomains(
         50,
@@ -160,6 +168,14 @@ const DiscoveryScreenV2 = ({route}) => {
       }));
     };
 
+    if (text === undefined) {
+      await fetchDiscoveryInitialDomains();
+    } else {
+      await fetchDiscoveryDataDomain();
+    }
+  };
+
+  const fetchDiscoveryDataTopicOnly = async (text) => {
     const fetchDiscoveryInitialTopics = async () => {
       const initialData = await DiscoveryRepo.fetchInitialDiscoveryTopics(
         50,
@@ -188,6 +204,14 @@ const DiscoveryScreenV2 = ({route}) => {
       }));
     };
 
+    if (text === undefined) {
+      await fetchDiscoveryInitialTopics();
+    } else {
+      await fetchDiscoveryDataTopic();
+    }
+  };
+
+  const fetchDiscoveryDataNewsOnly = async (text) => {
     const fetchDiscoveryDataNews = async () => {
       const cancelToken = cancelTokenRef?.current?.token;
       const data = await DiscoveryRepo.fetchDiscoveryDataNews(text, {cancelToken});
@@ -200,22 +224,20 @@ const DiscoveryScreenV2 = ({route}) => {
       }));
     };
 
-    if (text === undefined) {
-      await Promise.all([
-        fetchDiscoveryInitialUsers(),
-        fetchDiscoveryInitialDomains(),
-        fetchDiscoveryInitialTopics(),
-        fetchDiscoveryDataNews()
-      ]);
-    } else {
+    await fetchDiscoveryDataNews();
+  };
+
+  const fetchDiscoveryData = async (text) => {
+    if (text !== undefined) {
       setIsFirstTimeOpen(false);
-      await Promise.all([
-        fetchDiscoveryDataUser(),
-        fetchDiscoveryDataDomain(),
-        fetchDiscoveryDataTopic(),
-        fetchDiscoveryDataNews()
-      ]);
     }
+
+    await Promise.all([
+      fetchDiscoveryDataUserOnly(text),
+      fetchDiscoveryDataDomainOnly(text),
+      fetchDiscoveryDataTopicOnly(text),
+      fetchDiscoveryDataNewsOnly(text)
+    ]);
   };
 
   React.useEffect(() => {
@@ -243,6 +265,7 @@ const DiscoveryScreenV2 = ({route}) => {
       return (
         <UsersFragment
           isLoadingDiscoveryUser={isLoadingDiscovery.user}
+          setIsLoadingDiscovery={setIsLoadingDiscovery}
           hidden={selectedScreen !== DISCOVERY_TAB_USERS}
           isFirstTimeOpen={isFirstTimeOpen}
           setIsFirstTimeOpen={setIsFirstTimeOpen}
@@ -250,6 +273,7 @@ const DiscoveryScreenV2 = ({route}) => {
           unfollowedUsers={discoveryData?.unfollowedUsers || []}
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
+          fetchSpecificData={fetchDiscoveryDataUserOnly}
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
           isUser={true}
@@ -281,6 +305,7 @@ const DiscoveryScreenV2 = ({route}) => {
           setUnfollowedTopic={setDiscoveryDataUnfollowedTopics}
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
+          fetchSpecificData={fetchDiscoveryDataTopicOnly}
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
         />
@@ -299,6 +324,7 @@ const DiscoveryScreenV2 = ({route}) => {
           setUnfollowedDomains={setDiscoveryDataUnfollowedDomains}
           setSearchText={setSearchText}
           fetchData={fetchDiscoveryData}
+          fetchSpecificData={fetchDiscoveryDataDomainOnly}
           searchText={searchText}
           withoutRecent={route.name === 'Followings'}
         />
@@ -313,6 +339,7 @@ const DiscoveryScreenV2 = ({route}) => {
           setIsFirstTimeOpen={setIsFirstTimeOpen}
           setSearchText={setSearchText}
           news={discoveryDataNews}
+          fetchSpecificData={fetchDiscoveryDataNewsOnly}
         />
       );
     return null;

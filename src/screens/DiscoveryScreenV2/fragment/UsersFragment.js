@@ -1,7 +1,15 @@
 import * as React from 'react';
 import Accordion from 'react-native-collapsible/Accordion';
 import PropTypes from 'prop-types';
-import {ActivityIndicator, FlatList, Keyboard, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Keyboard,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 /* eslint-disable no-use-before-define */
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -80,6 +88,7 @@ const UsersFragment = ({
   withoutRecent = false,
   showRecentSearch = true,
   fetchData = () => {},
+  fetchSpecificData = () => {},
   searchText,
   isUser,
   eventTrack = {
@@ -98,7 +107,8 @@ const UsersFragment = ({
   const [profile] = React.useContext(Context).profile;
   const navigation = useNavigation();
   const [client] = React.useContext(Context).client;
-  const {exchangeFollower, users, updateFollowDiscoveryContext} = useDiscovery();
+  const {users, updateFollowDiscoveryContext, isRefreshControlShown, setIsRefreshControlShown} =
+    useDiscovery();
   const [loadingDM, setLoadingDM] = React.useState(false);
   const {createSignChat, loadingCreateChat} = useCreateChat();
   const [activeSections, setActiveSections] = React.useState([]);
@@ -201,6 +211,12 @@ const UsersFragment = ({
       }
     }
     if (searchText.length > 0) fetchData();
+  };
+
+  const onFlatListRefreshed = async () => {
+    setIsRefreshControlShown(true);
+    await fetchSpecificData();
+    setIsRefreshControlShown(false);
   };
 
   const renderDiscoveryItem = ({from, item, index, section}) => {
@@ -410,6 +426,14 @@ const UsersFragment = ({
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         style={{backgroundColor: COLORS.almostBlack}}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshControlShown}
+            onRefresh={onFlatListRefreshed}
+            colors={COLORS.white}
+            tintColor={COLORS.white}
+          />
+        }
       />
     );
   };

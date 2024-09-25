@@ -10,6 +10,7 @@ import {getFollowingTopic} from '../../../service/topics';
 const useDiscovery = () => {
   const [, followingDispatch] = React.useContext(Context).following;
   const [refreshing, setRefreshing] = React.useState(false);
+  const [isRefreshControlShown, setIsRefreshControlShown] = React.useState(false);
   const [discovery, discoveryDispatch] = React.useContext(Context).discovery;
 
   const users = React.useMemo(() => {
@@ -168,11 +169,13 @@ const useDiscovery = () => {
     refreshing,
     topics,
     users,
+    isRefreshControlShown,
 
     exchangeFollower,
     getIsMeFollowingTargetStatus,
     mapTopic,
     onRefreshDiscovery,
+    setIsRefreshControlShown,
     topicExchangeFollower,
     updateFollowDiscoveryContext,
     updateFollowTopicDiscoveryContext
