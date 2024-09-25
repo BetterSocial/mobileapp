@@ -3,9 +3,9 @@ import SimpleToast from 'react-native-simple-toast';
 import moment from 'moment';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {CommonActions, useNavigation} from '@react-navigation/native';
+import {Platform} from 'react-native';
 import {atom, useRecoilState} from 'recoil';
 
-import {Platform} from 'react-native';
 import AnonymousMessageRepo from '../../../service/repo/anonymousMessageRepo';
 import ChannelList from '../../../database/schema/ChannelListSchema';
 import ChatSchema from '../../../database/schema/ChatSchema';
@@ -152,7 +152,11 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     });
   };
 
-  const helperSaveChannelDetail = async (channel: ChannelList, response: any) => {
+  const helperSaveChannelDetail = async (
+    channel: ChannelList,
+    response: any,
+    callback?: () => Promise<void>
+  ) => {
     if (!localDb) return;
 
     if (Platform.OS === 'android') {
@@ -189,6 +193,8 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
         }
       });
     }
+
+    callback?.();
 
     if (Platform.OS === 'android') {
       refresh('channelList');
@@ -265,7 +271,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
     });
   };
 
-  const helperGetChannelDetail = async (channel: ChannelList) => {
+  const helperGetChannelDetail = async (channel: ChannelList, callback?: () => Promise<void>) => {
     if (!localDb) return;
 
     try {
@@ -276,7 +282,7 @@ function useChatUtilsHook(type: 'SIGNED' | 'ANONYMOUS'): UseChatUtilsHook {
         const channelType = channel?.channelType === 'GROUP' ? 'group' : 'messaging';
         response = await SignedMessageRepo.getSignedChannelDetail(channelType, channel?.id);
       }
-      helperSaveChannelDetail(channel, response);
+      helperSaveChannelDetail(channel, response, callback);
     } catch (e) {
       console.log('getChannelDetail error', e);
     } finally {
