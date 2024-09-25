@@ -1,5 +1,6 @@
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import SimpleToast from 'react-native-simple-toast';
 import messaging from '@react-native-firebase/messaging';
 import React, {useState} from 'react';
 import {Platform} from 'react-native';
@@ -173,6 +174,7 @@ const usePushNotificationHook = () => {
       AnalyticsEventTracking.eventTrack(
         `${BetterSocialEventTracking.BACKEND_PUSH_NOTIFICATIONS}newMessage`
       );
+
       if (notification?.userInteraction) {
         const isSameChannel = selectedChannel?.id === notification?.data?.channel_id;
         const isOnChatScreen = ['SignedChatScreen', 'AnonymousChatScreen'].includes(
@@ -184,10 +186,50 @@ const usePushNotificationHook = () => {
             id: notification?.data?.channel_id,
             channelType: 'PM'
           });
+
           return fetchChannelDetail(channel);
         }
 
         const channel = await ChannelList.getSchemaById(localDb, notification?.data?.channel_id);
+        if (!channel) {
+          try {
+            setIsLoadingFetchingChannelDetail(true);
+            const fetchChannel = new ChannelList({
+              id: notification?.data?.channel_id,
+              channelType: 'PM'
+            });
+
+            fetchChannelDetail(fetchChannel, async () => {
+              setIsLoadingFetchingChannelDetail(false);
+              const fetchedChannel = await ChannelList.getSchemaById(
+                localDb,
+                notification?.data?.channel_id
+              );
+
+              if (!fetchedChannel) {
+                console.log('fetched channel is null');
+                return;
+              }
+
+              setSelectedChannel(fetchedChannel);
+              const endTime = Date.now().valueOf();
+              if (notification?.data?.is_annoymous === 'false') {
+                helperNavigationResetWithData({
+                  screen: 'SignedChatScreen'
+                });
+              } else {
+                helperNavigationResetWithData({
+                  screen: 'AnonymousChatScreen'
+                });
+              }
+            });
+
+            return;
+          } finally {
+            setIsLoadingFetchingChannelDetail(false);
+          }
+        }
+
         setSelectedChannel(channel);
         if (notification?.data?.is_annoymous === 'false') {
           helperNavigationResetWithData({
