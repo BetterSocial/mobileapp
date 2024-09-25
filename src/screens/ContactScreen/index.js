@@ -62,6 +62,7 @@ const ContactScreen = ({navigation}) => {
   const [dataProviderSearch, setDataProviderSearch] = React.useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
   const [text, setText] = React.useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = React.useState('');
   const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [usernames, setUsernames] = React.useState([profile.myProfile.username]);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
@@ -124,6 +125,7 @@ const ContactScreen = ({navigation}) => {
   const handleSearch = async (searchText) => {
     try {
       setIsLoadingSearchResult(true);
+      setDebouncedSearchText(searchText);
 
       const cancelToken = cancelTokenRef?.current?.token;
       const data = await DiscoveryRepo.fetchDiscoveryDataUser(searchText, isAnon, {cancelToken});
@@ -403,6 +405,7 @@ const ContactScreen = ({navigation}) => {
       debounced(changedText);
     } else {
       setUsersSearch([]);
+      setDebouncedSearchText('');
       debounced.cancel();
     }
   };
@@ -471,26 +474,29 @@ const ContactScreen = ({navigation}) => {
         </View>
       )}
 
-      {isRecyclerViewShown && usersSearch.length <= 0 && !isLoadingSearchResult && (
-        <RecyclerListView
-          style={styles.recyclerview}
-          layoutProvider={layoutProvider}
-          dataProvider={dataProvider}
-          extendedState={{
-            followed
-          }}
-          rowRenderer={rowRenderer}
-          scrollViewProps={{
-            refreshControl: (
-              <RefreshControl
-                tintColor={COLORS.white}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-            )
-          }}
-        />
-      )}
+      {isRecyclerViewShown &&
+        usersSearch.length <= 0 &&
+        debouncedSearchText.length === 0 &&
+        !isLoadingSearchResult && (
+          <RecyclerListView
+            style={styles.recyclerview}
+            layoutProvider={layoutProvider}
+            dataProvider={dataProvider}
+            extendedState={{
+              followed
+            }}
+            rowRenderer={rowRenderer}
+            scrollViewProps={{
+              refreshControl: (
+                <RefreshControl
+                  tintColor={COLORS.white}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              )
+            }}
+          />
+        )}
 
       {isRecyclerViewShownSearch && usersSearch.length > 0 && !isLoadingSearchResult && (
         <RecyclerListView
