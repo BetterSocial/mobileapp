@@ -11,7 +11,7 @@ interface UseChatUtilsHook {
   isLoadingFetchingChannelDetail: boolean;
   selectedChannel: ChannelList | null;
   selectedChannelKey: number;
-  fetchChannelDetail: (channel: ChannelListSchema) => void;
+  fetchChannelDetail: (channel: ChannelListSchema, callback?: () => Promise<void>) => void;
   goBack: () => void;
   goToChatScreen: (
     channel: ChannelListSchema,
