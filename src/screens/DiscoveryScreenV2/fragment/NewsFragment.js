@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import {useNavigation} from '@react-navigation/native';
@@ -9,6 +9,7 @@ import LoadingWithoutModal from '../../../components/LoadingWithoutModal';
 import RecentSearch from '../elements/RecentSearch';
 import RenderItem from '../elements/RenderItem';
 import share from '../../../utils/share';
+import useDiscovery from '../hooks/useDiscovery';
 import useDiscoveryScreenAnalyticsHook from '../../../libraries/analytics/useDiscoveryScreenAnalyticsHook';
 import useIsReady from '../../../hooks/useIsReady';
 import {COLORS} from '../../../utils/theme';
@@ -22,10 +23,12 @@ const NewsFragment = ({
   isFirstTimeOpen,
   setSearchText = () => {},
   setIsFirstTimeOpen = () => {},
+  fetchSpecificData = () => {},
   news = []
 }) => {
   const [myId, setMyId] = React.useState('');
   const [defaultNews] = React.useContext(Context).news;
+  const {isRefreshControlShown, setIsRefreshControlShown} = useDiscovery();
 
   const {
     news: {
@@ -50,6 +53,12 @@ const NewsFragment = ({
     };
     parseToken();
   }, []);
+
+  const onFlatListRefreshed = async () => {
+    setIsRefreshControlShown(true);
+    await fetchSpecificData();
+    setIsRefreshControlShown(false);
+  };
 
   const renderNewsItem = () => {
     if (isFirstTimeOpen) {
@@ -140,7 +149,16 @@ const NewsFragment = ({
     );
 
   return (
-    <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled">
+    <ScrollView
+      keyboardDismissMode="on-drag"
+      keyboardShouldPersistTaps="handled"
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshControlShown}
+          onRefresh={onFlatListRefreshed}
+          tintColor={COLORS.white}
+        />
+      }>
       <RecentSearch
         shown={isFirstTimeOpen}
         setSearchText={setSearchText}

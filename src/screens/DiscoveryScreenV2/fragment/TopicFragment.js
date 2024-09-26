@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Accordion from 'react-native-collapsible/Accordion';
 import PropTypes from 'prop-types';
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, RefreshControl, StyleSheet, Text, View} from 'react-native';
 /* eslint-disable no-underscore-dangle */
 import {useNavigation} from '@react-navigation/native';
 
@@ -102,7 +102,9 @@ const TopicFragment = ({
 
   const {followTopic} = useChatClientHook();
   const {
+    isRefreshControlShown,
     topics,
+    setIsRefreshControlShown,
     updateFollowTopicDiscoveryContext,
     topicExchangeFollower: exchangeFollower
   } = useDiscovery();
@@ -180,6 +182,12 @@ const TopicFragment = ({
     onTopicPressed(section);
 
     navigation.push('TopicPageScreen', navigationParam);
+  };
+
+  const onFlatListRefreshed = async () => {
+    setIsRefreshControlShown(true);
+    await fetchData();
+    setIsRefreshControlShown(false);
   };
 
   const renderDiscoveryItem = ({from, item, index, section}) => {
@@ -291,6 +299,13 @@ const TopicFragment = ({
           keyExtractor={(item, index) => index.toString()}
           onEndReached={() => (firstData.length > 0 ? fetchData() : null)}
           onEndReachedThreshold={0.6}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshControlShown}
+              onRefresh={onFlatListRefreshed}
+              tintColor={COLORS.white}
+            />
+          }
         />
       </View>
     );
