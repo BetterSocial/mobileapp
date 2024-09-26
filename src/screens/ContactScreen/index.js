@@ -414,6 +414,21 @@ const ContactScreen = ({navigation}) => {
     if (isCreateCommunity) eventTrack.onCreateCommunityScreenSearchUserClicked();
   };
 
+  const isNoUsersFoundShown =
+    isRecyclerViewShown &&
+    usersSearch.length <= 0 &&
+    debouncedSearchText.length > 0 &&
+    !isLoadingSearchResult;
+
+  const isDefaultUserFlatListShown =
+    isRecyclerViewShown &&
+    usersSearch.length <= 0 &&
+    debouncedSearchText.length === 0 &&
+    !isLoadingSearchResult;
+
+  const isSearchUserFlatListShown =
+    isRecyclerViewShownSearch && usersSearch.length > 0 && !isLoadingSearchResult;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent={false} barStyle={'light-content'} />
@@ -474,31 +489,30 @@ const ContactScreen = ({navigation}) => {
         </View>
       )}
 
-      {isRecyclerViewShown &&
-        usersSearch.length <= 0 &&
-        debouncedSearchText.length === 0 &&
-        !isLoadingSearchResult && (
-          <RecyclerListView
-            style={styles.recyclerview}
-            layoutProvider={layoutProvider}
-            dataProvider={dataProvider}
-            extendedState={{
-              followed
-            }}
-            rowRenderer={rowRenderer}
-            scrollViewProps={{
-              refreshControl: (
-                <RefreshControl
-                  tintColor={COLORS.white}
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-              )
-            }}
-          />
-        )}
+      {isNoUsersFoundShown && <Text style={styles.noUsersFound}>No users found</Text>}
 
-      {isRecyclerViewShownSearch && usersSearch.length > 0 && !isLoadingSearchResult && (
+      {isDefaultUserFlatListShown && (
+        <RecyclerListView
+          style={styles.recyclerview}
+          layoutProvider={layoutProvider}
+          dataProvider={dataProvider}
+          extendedState={{
+            followed
+          }}
+          rowRenderer={rowRenderer}
+          scrollViewProps={{
+            refreshControl: (
+              <RefreshControl
+                tintColor={COLORS.white}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            )
+          }}
+        />
+      )}
+
+      {isSearchUserFlatListShown && (
         <RecyclerListView
           style={styles.recyclerview}
           layoutProvider={layoutProviderSearch}
@@ -558,6 +572,15 @@ const styles = StyleSheet.create({
   subtitleStyle: (isAnon) => ({
     color: isAnon ? COLORS.anon_primary : COLORS.signed_primary
   }),
+  noUsersFound: {
+    marginTop: dimen.normalizeDimen(16),
+    flex: 1,
+    alignSelf: 'center',
+    textAlign: 'center',
+    color: COLORS.white,
+    fontSize: 14,
+    fontFamily: fonts.inter[500]
+  },
   info: {
     flexDirection: 'row',
     marginTop: dimen.normalizeDimen(16)
