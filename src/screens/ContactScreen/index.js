@@ -62,6 +62,7 @@ const ContactScreen = ({navigation}) => {
   const [dataProviderSearch, setDataProviderSearch] = React.useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
   const [text, setText] = React.useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = React.useState('');
   const [followed, setFollowed] = React.useState([profile.myProfile.user_id]);
   const [usernames, setUsernames] = React.useState([profile.myProfile.username]);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
@@ -124,6 +125,7 @@ const ContactScreen = ({navigation}) => {
   const handleSearch = async (searchText) => {
     try {
       setIsLoadingSearchResult(true);
+      setDebouncedSearchText(searchText);
 
       const cancelToken = cancelTokenRef?.current?.token;
       const data = await DiscoveryRepo.fetchDiscoveryDataUser(searchText, isAnon, {cancelToken});
@@ -403,6 +405,7 @@ const ContactScreen = ({navigation}) => {
       debounced(changedText);
     } else {
       setUsersSearch([]);
+      setDebouncedSearchText('');
       debounced.cancel();
     }
   };
@@ -410,6 +413,21 @@ const ContactScreen = ({navigation}) => {
   const onPressInSearch = () => {
     if (isCreateCommunity) eventTrack.onCreateCommunityScreenSearchUserClicked();
   };
+
+  const isNoUsersFoundShown =
+    isRecyclerViewShown &&
+    usersSearch.length <= 0 &&
+    debouncedSearchText.length > 0 &&
+    !isLoadingSearchResult;
+
+  const isDefaultUserFlatListShown =
+    isRecyclerViewShown &&
+    usersSearch.length <= 0 &&
+    debouncedSearchText.length === 0 &&
+    !isLoadingSearchResult;
+
+  const isSearchUserFlatListShown =
+    isRecyclerViewShownSearch && usersSearch.length > 0 && !isLoadingSearchResult;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -471,7 +489,9 @@ const ContactScreen = ({navigation}) => {
         </View>
       )}
 
-      {isRecyclerViewShown && usersSearch.length <= 0 && !isLoadingSearchResult && (
+      {isNoUsersFoundShown && <Text style={styles.noUsersFound}>No users found</Text>}
+
+      {isDefaultUserFlatListShown && (
         <RecyclerListView
           style={styles.recyclerview}
           layoutProvider={layoutProvider}
@@ -492,7 +512,7 @@ const ContactScreen = ({navigation}) => {
         />
       )}
 
-      {isRecyclerViewShownSearch && usersSearch.length > 0 && !isLoadingSearchResult && (
+      {isSearchUserFlatListShown && (
         <RecyclerListView
           style={styles.recyclerview}
           layoutProvider={layoutProviderSearch}
@@ -552,6 +572,15 @@ const styles = StyleSheet.create({
   subtitleStyle: (isAnon) => ({
     color: isAnon ? COLORS.anon_primary : COLORS.signed_primary
   }),
+  noUsersFound: {
+    marginTop: dimen.normalizeDimen(16),
+    flex: 1,
+    alignSelf: 'center',
+    textAlign: 'center',
+    color: COLORS.white,
+    fontSize: 14,
+    fontFamily: fonts.inter[500]
+  },
   info: {
     flexDirection: 'row',
     marginTop: dimen.normalizeDimen(16)
